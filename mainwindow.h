@@ -21,8 +21,16 @@ public:
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
+    QGraphicsScene *scene2;
+    QGraphicsScene *scene3;
     QGraphicsEllipseItem * ellipse;
     QGraphicsRectItem *rectangle;
+    QGraphicsRectItem *rectangle2;
+    QGraphicsRectItem *rectangle3;
+
+
+private slots:
+    void powerClicked();
 
 
 };
