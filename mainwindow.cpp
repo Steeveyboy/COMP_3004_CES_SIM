@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     curTimer = -1;
-
+    attached = false;
 
     powerOn = false;
 
@@ -38,16 +38,17 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->waveFormButton, SIGNAL(released()), this, SLOT(waveLengthClicked()));
     connect(ui->frequencyButton, SIGNAL(released()), this, SLOT(frequencyClicked()));
     connect(ui->currentButton, SIGNAL(released()), this, SLOT(currentClicked()));
-    connect(ui->timerButton, &QPushButton::pressed, this, /*Timer Menu Function*/);
-    conenct(ui->increaseButton, &QPushButton::pressed, this, /*Menu up Function*/);
-    connect(ui->decreaseButton, &QPushButton::pressed, this, /*Menu Down Function*/);
-    connect(ui->startButton, &QPushButton::pressed, this, /*Start Function*/);
+    connect(ui->timerButton, SIGNAL(released()), this, SLOT(timerClicked()));
+    connect(ui->increaseButton, SIGNAL(released()), this, SLOT(incClicked()));
+    connect(ui->decreaseButton, SIGNAL(released()), this, SLOT(decClicked()));
+    connect(ui->startButton, SIGNAL(released()), this, SLOT(startClicked()));
 
     menu = ui->mainList;
 
     waveMenu = new Menu("Wave Form Options", {"Alpha", "Betta", "Gamma"});
     frequencyMenu = new Menu("Frequency Options", {"0.5 Hz", "77 Hz", "100 Hz"});
     currentMenu = new Menu("Current Options", {"Current Options"});
+    timerMenu = new Menu("Timer Options", {"20 Minutes", "40 Minutes", "60 Minutes"});
 
 }
 
@@ -74,7 +75,13 @@ void MainWindow::powerClicked()
     {
         rectangle2 = scene2->addRect(10,10, 183, 140, penBlack, brushBlack);
         powerOn = false;
-        return;
+        return;int nextIndex = activeQListWidget->currentRow() + 1;
+
+        if (nextIndex > activeQListWidget->count() - 1) {
+            nextIndex = 0;
+        }
+
+        activeQListWidget->setCurrentRow(nextIndex);
     }
 
 
@@ -95,4 +102,52 @@ void MainWindow::currentClicked()
 {
     menu = ui->mainList;
     menu->addItems(currentMenu->getListItems());
+}
+
+void MainWindow::timerClicked()
+{
+    menu = ui->mainList;
+    menu->addItems(currentMenu->getListItems());
+}
+
+void MainWindow::incClicked()
+{
+    int nextIndex = activeQListWidget->currentRow() - 1;
+
+    if (nextIndex < 0) {
+        nextIndex = activeQListWidget->count() - 1;
+    }
+
+    activeQListWidget->setCurrentRow(nextIndex);
+}
+
+void MainWindow::decClicked()
+{
+    int nextIndex = activeQListWidget->currentRow() + 1;
+
+    if (nextIndex > activeQListWidget->count() - 1) {
+        nextIndex = 0;
+    }
+
+    activeQListWidget->setCurrentRow(nextIndex);
+}
+
+void MainWindow::startClicked()
+{
+    if (attached)
+    {
+        //during treatment, check every second to see if electrodes connected, if they ever become disconnected stop timer
+        //during treatment, decrement timer every second, also check current for faults every second, also also check battery level
+        //if battery level hits 5% give a warning, if it hits 2% give warning and power off
+    }
+}
+
+void MainWindow::attachClicked()
+{
+    attached = true;
+}
+
+void MainWindow::detachClicked()
+{
+    attached = false;
 }
