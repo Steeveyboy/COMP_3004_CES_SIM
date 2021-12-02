@@ -6,6 +6,26 @@
 #include <QListWidget>
 #include <QtCore>
 #include <QtGui>
+#include <QSpinBox>
+#include <QListWidget>
+#include <QGraphicsView>
+#include <QTime>
+#include <QStatusBar>
+#include <QVector>
+#include <QtGlobal>
+
+//Include statements for other header files go here
+
+
+/* Class purpose: The mainwindow is the main control class for the whole program
+ *
+ * Data Members:
+ *
+ *
+ * Class Functions:
+ *
+ *
+ */
 
 #include "menu.h"
 
