@@ -51,9 +51,11 @@ private:
     Menu *waveMenu;
     Menu *frequencyMenu;
     Menu *currentMenu;
+    Menu *timerMenu;
     QListWidget *menu;
     bool powerOn;
     int curTimer;
+    bool attached;
 
 
 private slots:
@@ -61,6 +63,12 @@ private slots:
     void waveLengthClicked();
     void frequencyClicked();
     void currentClicked();
+    void timerClicked();
+    void incClicked();
+    void decClicked();
+    void startClicked();
+    void attachClicked();
+    void detachClicked();
 
 
 };
