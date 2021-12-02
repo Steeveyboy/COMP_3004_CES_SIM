@@ -3,8 +3,11 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
+#include <QListWidget>
 #include <QtCore>
 #include <QtGui>
+
+#include "menu.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -27,10 +30,18 @@ private:
     QGraphicsRectItem *rectangle;
     QGraphicsRectItem *rectangle2;
     QGraphicsRectItem *rectangle3;
+    Menu *waveMenu;
+    Menu *frequencyMenu;
+    Menu *currentMenu;
+    QListWidget *menu;
+    bool powerOn;
 
 
 private slots:
     void powerClicked();
+    void waveLengthClicked();
+    void frequencyClicked();
+    void currentClicked();
 
 
 };

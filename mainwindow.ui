@@ -125,6 +125,9 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
     </property>
    </widget>
    <widget class="QGraphicsView" name="powerOffView">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -375,6 +378,17 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
      <string>✓</string>
     </property>
    </widget>
+   <widget class="QListWidget" name="mainList">
+    <property name="geometry">
+     <rect>
+      <x>300</x>
+      <y>280</y>
+      <width>221</width>
+      <height>101</height>
+     </rect>
+    </property>
+   </widget>
+   <zorder>mainList</zorder>
    <zorder>deviceWholeView</zorder>
    <zorder>timerButton</zorder>
    <zorder>increaseButton</zorder>
@@ -390,11 +404,11 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
    <zorder>frequencyButton</zorder>
    <zorder>recordButton</zorder>
    <zorder>currentButton</zorder>
-   <zorder>powerOffView</zorder>
    <zorder>backButton</zorder>
    <zorder>checkButton</zorder>
-   <zorder>recordLabel</zorder>
+   <zorder>powerOffView</zorder>
    <zorder>batteryLabel</zorder>
+   <zorder>recordLabel</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
