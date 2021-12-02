@@ -7,7 +7,6 @@
 #include <QtCore>
 #include <QtGui>
 #include <QSpinBox>
-#include <QListWidget>
 #include <QGraphicsView>
 #include <QTime>
 #include <QStatusBar>
@@ -15,19 +14,18 @@
 #include <QtGlobal>
 
 //Include statements for other header files go here
-
+#include "menu.h"
 
 /* Class purpose: The mainwindow is the main control class for the whole program
  *
  * Data Members:
- *
+ *-int curTimer: the current timer for the treatment
  *
  * Class Functions:
  *
  *
  */
 
-#include "menu.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -55,6 +53,7 @@ private:
     Menu *currentMenu;
     QListWidget *menu;
     bool powerOn;
+    int curTimer;
 
 
 private slots:

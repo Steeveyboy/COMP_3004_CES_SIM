@@ -3,12 +3,16 @@
 #include "iostream"
 #include <string>
 using namespace std;
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    curTimer = -1;
+
 
     powerOn = false;
 
@@ -34,6 +38,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->waveFormButton, SIGNAL(released()), this, SLOT(waveLengthClicked()));
     connect(ui->frequencyButton, SIGNAL(released()), this, SLOT(frequencyClicked()));
     connect(ui->currentButton, SIGNAL(released()), this, SLOT(currentClicked()));
+    connect(ui->timerButton, &QPushButton::pressed, this, /*Timer Menu Function*/);
+    conenct(ui->increaseButton, &QPushButton::pressed, this, /*Menu up Function*/);
+    connect(ui->decreaseButton, &QPushButton::pressed, this, /*Menu Down Function*/);
+    connect(ui->startButton, &QPushButton::pressed, this, /*Start Function*/);
 
     menu = ui->mainList;
 
