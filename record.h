@@ -6,12 +6,13 @@
 
 class record {
   public:
-    record(int fq, int pwr, int dur, int id, std::string dt){
+    record(int fq, int pwr, int dur, int newId, std::string dt){
       freq = fq;
       powerLevel = pwr;
       duration = dur;
-      id = id;
+      id = newId;
       date = dt;
+      //std::cout<<id<<std::endl;
     };
     int freq;
     int powerLevel;
