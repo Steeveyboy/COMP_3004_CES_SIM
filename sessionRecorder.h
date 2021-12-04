@@ -17,7 +17,6 @@ class sessionRecorder {
 		std::string date; //possibly an ENUM
 		void storeRecords();
 		void initRecords();
-
 		void printRecords();
 
 	public:
@@ -25,7 +24,7 @@ class sessionRecorder {
 		~sessionRecorder();
 		std::vector<record*> getHistory();
 		void deleteRecord(int);
-		void makeRecord(int, int, int);
+		void makeRecord(int, int, int, std::string);
 
 };
 

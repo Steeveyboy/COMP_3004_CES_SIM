@@ -6,7 +6,7 @@ using namespace std;
 int main(){
 	cout<<"starting"<<endl;
 	sessionRecorder *r = new sessionRecorder();
-	// r->makeRecord(1, 1, 1);
+	//r->makeRecord(1, 1, 1, "Alpha");
 	// r->makeRecord(2, 2, 2);
 	// r->makeRecord(3, 3, 3);
 	// r->makeRecord(4, 4, 4);

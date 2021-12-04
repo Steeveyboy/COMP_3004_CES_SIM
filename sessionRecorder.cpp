@@ -13,9 +13,9 @@ sessionRecorder::sessionRecorder() {
 void sessionRecorder::initRecords(){
 	ifstream infile(filepath, ios::in);
 	int freq, powerLev, duration, id;
-	string date;
-	while(infile >> freq >> powerLev >> duration >> date >> id){
-		record *r = new record(freq, powerLev, duration, id, date);
+	string date, wave;
+	while(infile >> freq >> powerLev >> duration >> wave >> date >> id){
+		record *r = new record(freq, powerLev, duration, wave, id, date);
 		records.push_back(r);
 	}
 }
@@ -44,9 +44,9 @@ void sessionRecorder::printRecords(){
 	}
 }
 
-void sessionRecorder::makeRecord(int fq, int pwr, int dur){
+void sessionRecorder::makeRecord(int fq, int pwr, int dur, string wave){
 	//cout<<fq<<"	"<<pwr<<"	"<<dur<<"	"<<records.size()<<endl;
-	record *rec = new record(fq, pwr, dur, records.size(), "date");
+	record *rec = new record(fq, pwr, dur, wave, records.size(), "date");
 	records.push_back(rec);
 	cout<<records[records.size()-1]->freq<<endl;
 	//storeRecords();
@@ -60,8 +60,8 @@ void sessionRecorder::storeRecords(){
 	record *r;
 	for(int i=0; i<records.size(); i++){
 		r = records[i];
-		cout<<r->freq<<"	"<<r->powerLevel<<"	"<<r->duration<<"	"<<"Date"<<"	"<<r->id<<endl;
-		fh<<r->freq<<"	"<<r->powerLevel<<"	"<<r->duration<<"	"<<"Date"<<"	"<<r->id<<endl;
+		cout<<r->freq<<"	"<<r->powerLevel<<"	"<<r->duration<<"	"<<r->waveform<<"	Date"<<"	"<<r->id<<endl;
+		fh<<r->freq<<"	"<<r->powerLevel<<"	"<<r->duration<<"	"<<r->waveform<<"	Date"<<"	"<<r->id<<endl;
 	}
 	fh.close();
 }
