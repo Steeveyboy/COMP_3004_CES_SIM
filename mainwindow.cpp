@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "iostream"
 #include <string>
+#include <sessionRecorder.h>
 using namespace std;
 #include <QDebug>
 
@@ -15,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     attached = false;
 
     powerOn = false;
+
+    recorder = new sessionRecorder();
 
     scene = new QGraphicsScene(this);
     ui->deviceWholeView->setScene(scene);
@@ -42,16 +45,55 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->increaseButton, SIGNAL(released()), this, SLOT(incClicked()));
     connect(ui->decreaseButton, SIGNAL(released()), this, SLOT(decClicked()));
     connect(ui->startButton, SIGNAL(released()), this, SLOT(startClicked()));
+    connect(ui->recordButton, SIGNAL(released()), this, SLOT(recordClicked()));
+    connect(ui->checkButton, SIGNAL(released()), this, SLOT(confirmClicked()));
+
 
     menu = ui->mainList;
     menu->setVisible(false);
 
-    waveMenu = new Menu("Wave Form Options", {"Alpha", "Betta", "Gamma"});
+    waveMenu = new Menu("Wave Form Options", {"Alpha", "Beta", "Gamma"});
     frequencyMenu = new Menu("Frequency Options", {"0.5 Hz", "77 Hz", "100 Hz"});
     currentMenu = new Menu("Current Options", {"Current Options"});
     timerMenu = new Menu("Timer Options", {"20 Minutes", "40 Minutes", "60 Minutes"});
 
 }
+
+void MainWindow::recordClicked(){
+    cout<<"record It"<<endl;
+    //recorder->makeRecord(frequency, powerLevel, waveForm, Duration);
+}
+
+void MainWindow::confirmClicked(){
+
+    if(menu->currentRow() < 0){ return; }
+
+    cout<<"confirm It"<<endl;
+    if(ui->page->text().toStdString() == "Wavelength"){
+        waveform = menu->item(menu->currentRow())->text().toStdString();
+        //cout<<waveform<<endl;
+        ui->waveSpot->setText(menu->item(menu->currentRow())->text());
+    }
+    else if(ui->page->text().toStdString() == "Frequency"){
+        frequency = menu->item(menu->currentRow())->text().toStdString();
+        ui->freqSpot->setText(menu->item(menu->currentRow())->text());
+    }
+    else if(ui->page->text().toStdString() == "Current"){
+        current = menu->item(menu->currentRow())->text().toStdString();
+        ui->currentSpot->setText(menu->item(menu->currentRow())->text());
+    }
+    else if(ui->page->text().toStdString() == "Timer"){
+        timer = menu->item(menu->currentRow())->text().toStdString().substr(0,3);
+        ui->timerSpot->setText(QString::fromStdString(timer));
+    }
+
+    //cout<<menu->item(menu->currentRow())->text().toStdString()<<"  "<<endl;
+}
+
+////This is a helper function to concatinate string. Enjoy!
+//string MainWindow::concatStr(string start, string end){
+//    cout<<start<<cout<<
+//}
 
 MainWindow::~MainWindow()
 {
@@ -83,10 +125,8 @@ void MainWindow::powerClicked()
         if (nextIndex > menu->count() - 1) {
             nextIndex = 0;
         }
-
         menu->setCurrentRow(nextIndex);
     }
-
 
 }
 void MainWindow::waveLengthClicked()
@@ -95,9 +135,13 @@ void MainWindow::waveLengthClicked()
     {
         menu->clear();
     }
+    ui->page->setText("Wavelength");
     menu = ui->mainList;
     menu->addItems(waveMenu->getListItems());
+
 }
+
+
 
 void MainWindow::frequencyClicked()
 {
@@ -105,6 +149,7 @@ void MainWindow::frequencyClicked()
     {
         menu->clear();
     }
+    ui->page->setText("Frequency");
     menu = ui->mainList;
     menu->addItems(frequencyMenu->getListItems());
 }
@@ -115,9 +160,12 @@ void MainWindow::currentClicked()
     {
         menu->clear();
     }
+    ui->page->setText("Current");
     menu = ui->mainList;
     menu->addItems(currentMenu->getListItems());
 }
+
+
 
 void MainWindow::timerClicked()
 {
@@ -126,6 +174,7 @@ void MainWindow::timerClicked()
         menu->clear();
     }
     menu = ui->mainList;
+    ui->page->setText("Timer");
     menu->addItems(timerMenu->getListItems());
 }
 
@@ -153,6 +202,9 @@ void MainWindow::decClicked()
 
 void MainWindow::startClicked()
 {
+    sessionStartTime = QDateTime::currentDateTime();
+
+//    cout<<sessionStartTime.toString().toStdString()<<endl;
     if (attached)
     {
         //during treatment, check every second to see if electrodes connected, if they ever become disconnected stop timer
