@@ -66,6 +66,7 @@ MainWindow::MainWindow(QWidget *parent)
     currentMenu = new Menu("Current Options", {"50", "100", "150", "200", "250", "300", "350", "400", "450", "500"});
     timerMenu = new Menu("Timer Options", {"20 minutes", "40 minutes", "60 minutes"});
 
+
 }
 
 void MainWindow::batClicked()
@@ -103,12 +104,12 @@ void MainWindow::confirmClicked(){
     }
     else if(ui->page->text().toStdString() == "Current"){
         //EDIT CURRENT HERE
-          current = menu->item(menu->currentRow())->text().toStdString();
+          current = stoi(menu->item(menu->currentRow())->text().toStdString());
           ui->currentSpot->setText(menu->item(menu->currentRow())->text());
     }
     else if(ui->page->text().toStdString() == "Timer"){
-        currTime = menu->item(menu->currentRow())->text().toStdString().substr(0,3);
-        ui->timerSpot->setText(QString::fromStdString(currTime));
+        timer = menu->item(menu->currentRow())->text().toStdString().substr(0,3);
+        ui->timerSpot->setText(QString::fromStdString(timer));
     }
 
     //cout<<menu->item(menu->currentRow())->text().toStdString()<<"  "<<endl;
@@ -208,7 +209,10 @@ void MainWindow::currentClicked()
 
 void MainWindow::timerClicked()
 {
-    if(menu != NULL) { menu->clear(); }
+    if(menu != NULL)
+    {
+        menu->clear();
+    }
     menu = ui->mainList;
     ui->page->setText("Timer");
     menu->addItems(timerMenu->getListItems());
@@ -242,6 +246,8 @@ void MainWindow::startClicked()
     int startSec = QDateTime::currentSecsSinceEpoch();
     QString format = "dddd/MM/dd-HH:mm:ss";
 
+
+//    cout<<sessionStartTime.toString().toStdString()<<endl;
     if (attached)
     {
         //during treatment, check every second to see if electrodes connected, if they ever become disconnected stop timer
@@ -255,6 +261,7 @@ void MainWindow::startClicked()
     int duration = endSec - startSec;
 
     if(recording){
+        cout<<sessionStartTime.toString(format).toStdString()<<endl;
         recorder->makeRecord(frequency, current, duration, sessionStartTime.toString(format).toStdString(), waveform);
     }
 
@@ -275,6 +282,6 @@ void MainWindow::faultClicked()
 {
     string fault = (string)"701";
     QString fault1 = "701";
-    current = fault;
+    current = stoi(fault);
     ui->currentSpot->setText(fault1);
 }
