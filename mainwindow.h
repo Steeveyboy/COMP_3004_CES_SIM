@@ -13,6 +13,8 @@
 #include <QVector>
 #include <QtGlobal>
 
+#include <QTimer>
+
 //Include statements for other header files go here
 #include "menu.h"
 
@@ -39,6 +41,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+
+public slots:
+   void slotFunction();
+
+
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
@@ -56,6 +63,8 @@ private:
     bool powerOn;
     int curTimer;
     bool attached;
+
+    QTimer *timer;
 
 
 private slots:
