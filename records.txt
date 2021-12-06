@@ -1,0 +1,7 @@
+1	1	1	Alpha	Date	0
+1	1	1	Alpha	Date	1
+1	1	1	Alpha	Date	2
+1	1	1	Alpha	Date	3
+1	1	1	Alpha	Date	4
+1	1	1	Alpha	Date	5
+1	1	1	Alpha	Date	6
