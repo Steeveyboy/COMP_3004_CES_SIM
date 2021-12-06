@@ -314,10 +314,13 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
     <property name="geometry">
      <rect>
       <x>130</x>
-      <y>80</y>
-      <width>81</width>
-      <height>17</height>
+      <y>69</y>
+      <width>91</width>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(100, 197, 110);</string>
     </property>
     <property name="text">
      <string>Battery: 100%</string>
@@ -326,11 +329,14 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
    <widget class="QLabel" name="recordLabel">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>80</y>
-      <width>91</width>
-      <height>17</height>
+      <x>30</x>
+      <y>69</y>
+      <width>101</width>
+      <height>31</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(100, 197, 110);</string>
     </property>
     <property name="text">
      <string>Recording: Off</string>
@@ -381,14 +387,13 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
    <widget class="QListWidget" name="mainList">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>280</y>
-      <width>221</width>
-      <height>101</height>
+      <x>30</x>
+      <y>100</y>
+      <width>191</width>
+      <height>121</height>
      </rect>
     </property>
    </widget>
-   <zorder>mainList</zorder>
    <zorder>deviceWholeView</zorder>
    <zorder>timerButton</zorder>
    <zorder>increaseButton</zorder>
@@ -406,9 +411,10 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
    <zorder>currentButton</zorder>
    <zorder>backButton</zorder>
    <zorder>checkButton</zorder>
-   <zorder>powerOffView</zorder>
    <zorder>batteryLabel</zorder>
    <zorder>recordLabel</zorder>
+   <zorder>mainList</zorder>
+   <zorder>powerOffView</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
