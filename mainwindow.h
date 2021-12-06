@@ -44,7 +44,7 @@ public:
 
 
 public slots:
-   void slotFunction();
+   void updateTimer();
 
 
 private:
@@ -65,6 +65,7 @@ private:
     int curTimer;
     bool attached;
     bool recording;
+    QTime curTime;
 
     sessionRecorder *recorder;
 

@@ -612,8 +612,8 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
    <widget class="QLabel" name="date_time">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>100</y>
+      <x>610</x>
+      <y>110</y>
       <width>141</width>
       <height>61</height>
      </rect>
@@ -648,13 +648,13 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
      <string>Timer</string>
     </property>
    </widget>
-   <widget class="QGraphicsView" name="graphicsView">
+   <widget class="QGraphicsView" name="timerView">
     <property name="geometry">
      <rect>
       <x>590</x>
-      <y>50</y>
+      <y>100</y>
       <width>191</width>
-      <height>141</height>
+      <height>91</height>
      </rect>
     </property>
    </widget>
@@ -722,10 +722,7 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
     </property>
    </widget>
    <zorder>label</zorder>
-   <zorder>date_time</zorder>
-   <zorder>label_2</zorder>
    <zorder>splitter</zorder>
-   <zorder>graphicsView</zorder>
    <zorder>deviceWholeView</zorder>
    <zorder>timerButton</zorder>
    <zorder>increaseButton</zorder>
@@ -757,6 +754,10 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
    <zorder>timerSpot</zorder>
    <zorder>currentSpot</zorder>
    <zorder>batteryButton</zorder>
+
+   <zorder>label_2</zorder>
+   <zorder>timerView</zorder>
+   <zorder>date_time</zorder>
    <zorder>lowBatteryLabel</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">

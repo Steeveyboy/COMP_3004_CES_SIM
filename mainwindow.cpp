@@ -8,7 +8,7 @@
 #include <unistd.h>
 using namespace std;
 #include <QDebug>
-
+#include <QMessageBox>
 #include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -19,13 +19,14 @@ MainWindow::MainWindow(QWidget *parent)
 
     // timer
     countdown = new QTimer(this);
-    connect(countdown, SIGNAL(timeout()), this, SLOT(slotFunction()));
-    countdown->start(1000); //1 second updates
+
+     //1 second updates
 
 
     attached = false;
     powerOn = false;
     recorder = new sessionRecorder();
+    curTime.setHMS(0, 0, 0, 0);
 
     scene = new QGraphicsScene(this);
     ui->deviceWholeView->setScene(scene);
@@ -57,7 +58,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->checkButton, SIGNAL(released()), this, SLOT(confirmClicked()));
     connect(ui->faultButton, SIGNAL(released()), this, SLOT(faultClicked()));
     connect(ui->batteryButton, SIGNAL(released()), this, SLOT(batClicked()));
-
+    connect(countdown, SIGNAL(timeout()), this, SLOT(updateTimer()));
+    connect(ui->attachButton, SIGNAL(released()), this, SLOT(attachClicked()));
+    connect(ui->detachButton, SIGNAL(released()), this, SLOT(detachClicked()));
 
     menu = ui->mainList;
     menu->setVisible(false);
@@ -140,6 +143,20 @@ void MainWindow::confirmClicked(){
     else if(ui->page->text().toStdString() == "Timer"){
         timer = menu->item(menu->currentRow())->text().toStdString().substr(0,3);
         ui->timerSpot->setText(QString::fromStdString(timer));
+        // string output of time
+        QTime time;
+        QString sixty = "60 ";
+        if (ui->timerSpot->text() == sixty)
+        {
+            printf("60");
+            time.setHMS(1, 0, 0, 0);
+        }else
+        {
+            time.setHMS(0, ui->timerSpot->text().toInt(), 0, 0);
+        }
+        QString timeText = time.toString("hh : mm : ss");
+        ui->date_time->setText(timeText);
+        curTime = time;
     }
 
     //cout<<menu->item(menu->currentRow())->text().toStdString()<<"  "<<endl;
@@ -158,14 +175,26 @@ MainWindow::~MainWindow()
 
 
 // timer
-void MainWindow::slotFunction()
+void MainWindow::updateTimer()
 {
    qDebug() <<"Testing frequent update...";
+   if(attached == false)
+   {
+       countdown->stop();
+   }else if(current == (string)"701")
+   {
+       countdown->stop();
+       powerClicked();
+       ui->powerButton->setEnabled(false);
+       QMessageBox::warning(
+                   this,
+                   tr("CES Machine"),
+                   tr("Fault Detected! Shutting Down"));
+   }
+   curTime = curTime.addSecs(-1);
+   QString timeStr = curTime.toString("hh : mm : ss");
+   ui->date_time->setText(timeStr);
 
-   // string output of time
-   QTime time = QTime::currentTime();
-   QString timeText = time.toString("hh : mm : ss");
-   ui->date_time->setText(timeText);
 }
 
 
@@ -292,12 +321,15 @@ void MainWindow::startClicked()
 {
     sessionStartTime = QDateTime::currentDateTime();
     int startSec = QDateTime::currentSecsSinceEpoch();
+
     QString format = "dddd/MM/dd-HH:mm:ss";
 
 
 //    cout<<sessionStartTime.toString().toStdString()<<endl;
-    if (attached)
+    if (attached == true)
     {
+        countdown->start(1000);
+
         //during treatment, check every second to see if electrodes connected, if they ever become disconnected stop timer
         //during treatment, decrement timer every second, also check current for faults every second, also also check battery level
         //if battery level hits 5% give a warning, if it hits 2% give warning and power off
