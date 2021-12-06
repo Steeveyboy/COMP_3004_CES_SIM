@@ -48,8 +48,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     waveMenu = new Menu("Wave Form Options", {"Alpha", "Betta", "Gamma"});
     frequencyMenu = new Menu("Frequency Options", {"0.5 Hz", "77 Hz", "100 Hz"});
-    currentMenu = new Menu("Current Options", {"Current Options"});
-    timerMenu = new Menu("Timer Options", {"20 Minutes", "40 Minutes", "60 Minutes"});
+    currentMenu = new Menu("Current Options", {50, 100, 150, 200, 250, 300, 350, 400, 450, 500});
+    timerMenu = new Menu("Timer Options", {20, 40, 60});
 
 }
 
