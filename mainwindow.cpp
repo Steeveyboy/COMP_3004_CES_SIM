@@ -61,7 +61,8 @@ MainWindow::MainWindow(QWidget *parent)
     menu->setVisible(false);
 
     waveMenu = new Menu("Wave Form Options", {"Alpha", "Beta", "Gamma"});
-    frequencyMenu = new Menu("Frequency Options", {"0.5 Hz", "77 Hz", "100 Hz"});
+
+    frequencyMenu = new Menu("Frequency Options", {"0.5-Hz", "77-Hz", "100-Hz"});
     currentMenu = new Menu("Current Options", {"50", "100", "150", "200", "250", "300", "350", "400", "450", "500"});
     timerMenu = new Menu("Timer Options", {"20 minutes", "40 minutes", "60 minutes"});
 
@@ -106,8 +107,8 @@ void MainWindow::confirmClicked(){
           ui->currentSpot->setText(menu->item(menu->currentRow())->text());
     }
     else if(ui->page->text().toStdString() == "Timer"){
-        timer = menu->item(menu->currentRow())->text().toStdString().substr(0,3);
-        ui->timerSpot->setText(QString::fromStdString(timer));
+        currTime = menu->item(menu->currentRow())->text().toStdString().substr(0,3);
+        ui->timerSpot->setText(QString::fromStdString(currTime));
     }
 
     //cout<<menu->item(menu->currentRow())->text().toStdString()<<"  "<<endl;
@@ -207,10 +208,7 @@ void MainWindow::currentClicked()
 
 void MainWindow::timerClicked()
 {
-    if(menu != NULL)
-    {
-        menu->clear();
-    }
+    if(menu != NULL) { menu->clear(); }
     menu = ui->mainList;
     ui->page->setText("Timer");
     menu->addItems(timerMenu->getListItems());
@@ -242,10 +240,8 @@ void MainWindow::startClicked()
 {
     sessionStartTime = QDateTime::currentDateTime();
     int startSec = QDateTime::currentSecsSinceEpoch();
+    QString format = "dddd/MM/dd-HH:mm:ss";
 
-
-
-//    cout<<sessionStartTime.toString().toStdString()<<endl;
     if (attached)
     {
         //during treatment, check every second to see if electrodes connected, if they ever become disconnected stop timer
@@ -259,7 +255,7 @@ void MainWindow::startClicked()
     int duration = endSec - startSec;
 
     if(recording){
-        recorder->makeRecord(frequency, current, duration, sessionStartTime.toString().toStdString(), waveform);
+        recorder->makeRecord(frequency, current, duration, sessionStartTime.toString(format).toStdString(), waveform);
     }
 
 

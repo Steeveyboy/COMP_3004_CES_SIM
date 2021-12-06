@@ -3,6 +3,7 @@
 #include <vector>
 #include "sessionRecorder.h"
 #include "record.h"
+#include <sstream>
 using namespace std;
 
 sessionRecorder::sessionRecorder() {
@@ -11,12 +12,19 @@ sessionRecorder::sessionRecorder() {
 }
 
 void sessionRecorder::initRecords(){
-	ifstream infile(filepath, ios::in);
-    int duration, id;
-    string freq, date, wave, curr;
 
-    //std::string fq, int cur, int dur, std::string wave, int newId, std::string dt
-    while(infile >> freq >> curr >> duration >> wave >> date >> id){
+	ifstream infile(filepath, ios::in);
+
+    string line;
+
+    int duration, id, curr;
+    string freq, date, wave;
+    cout<<"Collecting records"<<endl;
+//infile >> freq >> curr >> duration >> wave >> date >> id
+    while(getline(infile, line, '\n')){
+        stringstream ss(line);
+        ss >> freq >> curr >> duration >> wave >> date >> id;
+        cout<<"Co"<<endl;
         record *r = new record(freq, curr, duration, wave, id, date);
 		records.push_back(r);
 	}
@@ -59,12 +67,19 @@ void sessionRecorder::makeRecord(string fq, string curr, int dur, string date, s
 void sessionRecorder::storeRecords(){
     ofstream fh;
     fh.open(filepath);
+
+    //QFile fl(filepath);
+    //fl.open(QIODevice::WriteOnly);
+    //QTextStream textStream(fl);
+
+    cout<<"writing to "<<filepath<<endl;
 	//fh.open("records.txt", ios::out | ios::trunc);
 	record *r;
 	for(int i=0; i<records.size(); i++){
 		r = records[i];
-        cout<<r->freq<<"	"<<r->current<<"	"<<r->duration<<"	"<<r->waveform<<"	Date"<<"	"<<r->id<<endl;
-        fh<<r->freq<<"	"<<r->current<<"	"<<r->duration<<"	"<<r->waveform<<"	Date"<<"	"<<r->id<<endl;
+        cout<<r->freq<<"	"<<r->current<<"	"<<r->duration<<"	"<<r->waveform<<"	"<<r->date<<"	"<<r->id<<endl;
+        //textStream <<r->freq<<"	"<<r->current<<"	"<<r->duration<<"	"<<r->waveform<<"	Date"<<"	"<<r->id<<endl;
+        fh<<r->freq<<"	"<<r->current<<"	"<<r->duration<<"	"<<r->waveform<<"   "<<r->date<<"	"<<r->id<<endl;
 	}
 	fh.close();
 }

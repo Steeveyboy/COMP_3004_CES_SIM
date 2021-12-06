@@ -64,7 +64,7 @@ private:
     bool powerOn;
     int curTimer;
     bool attached;
-    bool recording;
+    bool recording = false;
 
     sessionRecorder *recorder;
 
@@ -73,7 +73,7 @@ private:
 //    string duration;
     string powerlevel;
     string frequency;
-    string timer;
+    string currTime;
     QDateTime sessionStartTime;
 
     QTimer *countdown;
