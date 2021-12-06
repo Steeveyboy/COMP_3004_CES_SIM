@@ -6,11 +6,19 @@
 using namespace std;
 #include <QDebug>
 
+#include <QDateTime>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    // timer
+    timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(slotFunction()));
+    timer->start(1000); //1 second updates
+
 
     curTimer = -1;
     attached = false;
@@ -54,8 +62,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     waveMenu = new Menu("Wave Form Options", {"Alpha", "Beta", "Gamma"});
     frequencyMenu = new Menu("Frequency Options", {"0.5 Hz", "77 Hz", "100 Hz"});
-    currentMenu = new Menu("Current Options", {"Current Options"});
-    timerMenu = new Menu("Timer Options", {"20 Minutes", "40 Minutes", "60 Minutes"});
+    //currentMenu = new Menu("Current Options", {50, 100, 150, 200, 250, 300, 350, 400, 450, 500});
+    //timerMenu = new Menu("Timer Options", {20, 40, 60});
 
 }
 
@@ -107,6 +115,20 @@ MainWindow::~MainWindow()
     delete recorder;
     delete ui;
 }
+
+
+// timer
+void MainWindow::slotFunction()
+{
+   qDebug() <<"Testing frequent update...";
+
+   // string output of time
+   QTime time = QTime::currentTime();
+   QString timeText = time.toString("hh : mm : ss");
+   ui->date_time->setText(timeText);
+}
+
+
 
 void MainWindow::powerClicked()
 {
