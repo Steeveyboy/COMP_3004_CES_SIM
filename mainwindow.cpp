@@ -4,6 +4,8 @@
 #include <string>
 #include <sessionRecorder.h>
 #include "menu.h"
+#include <stdio.h>
+#include <unistd.h>
 using namespace std;
 #include <QDebug>
 
@@ -68,6 +70,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->currentSpot->setVisible(false);
     ui->timerLabel->setVisible(false);
     ui->timerSpot->setVisible(false);
+    ui->lowBatteryLabel->setVisible(false);
 
     waveMenu = new Menu("Wave Form Options", {"Alpha", "Beta", "Gamma"});
 
@@ -84,6 +87,22 @@ void MainWindow::batClicked()
     QString batteryText = "Battery: ";
     QString percent = "%";
     ui->batteryLabel->setText(batteryText + batterylevel + percent);
+
+    if(batterylevel == "5")
+    {
+        cout<<"Warning: BATTERY LOW 5%"<<endl;
+        ui->lowBatteryLabel->setVisible(true);
+        QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
+
+    }
+    if(batterylevel == "2")
+    {
+        cout<<"Warning: Battery at 2%"<<endl;
+        ui->lowBatteryLabel->setVisible(true);
+        QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
+        powerClicked();
+    }
+
 }
 
 void MainWindow::recordClicked(){
