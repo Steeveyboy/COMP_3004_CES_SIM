@@ -1,7 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 using namespace std;
-
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include <QListWidget>
@@ -14,9 +13,8 @@ using namespace std;
 #include <QVector>
 #include <QtGlobal>
 #include <sessionRecorder.h>
-#include <string>
-
 #include <QTimer>
+#include <string>
 
 //Include statements for other header files go here
 #include "menu.h"
@@ -24,7 +22,7 @@ using namespace std;
 /* Class purpose: The mainwindow is the main control class for the whole program
  *
  * Data Members:
- *-int curTimer: the current timer for the treatment
+ *
  *
  * Class Functions:
  *
@@ -71,14 +69,14 @@ private:
     sessionRecorder *recorder;
 
     string waveform;
-    int current = 50;
+    string current;
 //    string duration;
     string powerlevel;
     string frequency;
     string timer;
     QDateTime sessionStartTime;
 
-    QTimer *timer;
+    QTimer *countdown;
 
 
 private slots:
@@ -94,6 +92,8 @@ private slots:
     void detachClicked();
     void recordClicked();
     void confirmClicked();
+    void faultClicked();
+    void batClicked();
 
 
 };
