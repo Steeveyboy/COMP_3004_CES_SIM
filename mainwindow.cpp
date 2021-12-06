@@ -59,6 +59,15 @@ MainWindow::MainWindow(QWidget *parent)
 
     menu = ui->mainList;
     menu->setVisible(false);
+    ui->page->setVisible(false);
+    ui->waveLabel->setVisible(false);
+    ui->waveSpot->setVisible(false);
+    ui->freqLabel->setVisible(false);
+    ui->freqSpot->setVisible(false);
+    ui->currentLabel->setVisible(false);
+    ui->currentSpot->setVisible(false);
+    ui->timerLabel->setVisible(false);
+    ui->timerSpot->setVisible(false);
 
     waveMenu = new Menu("Wave Form Options", {"Alpha", "Beta", "Gamma"});
 
@@ -80,9 +89,11 @@ void MainWindow::recordClicked(){
     //cout<<"record It"<<endl;
     if(recording){
         recording = false;
+        ui->recordLabel->setText("Recording: On");
     }
     else{
         recording = true;
+        ui->recordLabel->setText("Recording: Off");
     }
     //recorder->makeRecord(frequency, powerLevel, waveForm, Duration);
 }
@@ -149,6 +160,15 @@ void MainWindow::powerClicked()
     if(powerOn == false)
     {
         ui->powerOffView->setVisible(false);
+        ui->page->setVisible(true);
+        ui->waveLabel->setVisible(true);
+        ui->waveSpot->setVisible(true);
+        ui->freqLabel->setVisible(true);
+        ui->freqSpot->setVisible(true);
+        ui->currentLabel->setVisible(true);
+        ui->currentSpot->setVisible(true);
+        ui->timerLabel->setVisible(true);
+        ui->timerSpot->setVisible(true);
         menu->setVisible(true);
         powerOn = true;
         return;
@@ -156,6 +176,15 @@ void MainWindow::powerClicked()
     if(powerOn == true)
     {
         ui->powerOffView->setVisible(true);
+        ui->page->setVisible(false);
+        ui->waveLabel->setVisible(false);
+        ui->waveSpot->setVisible(false);
+        ui->freqLabel->setVisible(false);
+        ui->freqSpot->setVisible(false);
+        ui->currentLabel->setVisible(false);
+        ui->currentSpot->setVisible(false);
+        ui->timerLabel->setVisible(false);
+        ui->timerSpot->setVisible(false);
         menu->clear();
         menu->setVisible(false);
         powerOn = false;
