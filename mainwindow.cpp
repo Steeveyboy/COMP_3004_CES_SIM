@@ -60,7 +60,13 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 void MainWindow::recordClicked(){
-    cout<<"record It"<<endl;
+    //cout<<"record It"<<endl;
+    if(recording){
+        recording = false;
+    }
+    else{
+        recording = true;
+    }
     //recorder->makeRecord(frequency, powerLevel, waveForm, Duration);
 }
 
@@ -211,6 +217,8 @@ void MainWindow::startClicked()
         //during treatment, decrement timer every second, also check current for faults every second, also also check battery level
         //if battery level hits 5% give a warning, if it hits 2% give warning and power off
     }
+
+    if(){}
 }
 
 void MainWindow::attachClicked()

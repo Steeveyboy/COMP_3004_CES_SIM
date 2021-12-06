@@ -59,10 +59,12 @@ private:
     bool powerOn;
     int curTimer;
     bool attached;
+    bool recording;
 
     sessionRecorder *recorder;
+
     string waveform;
-    string current;
+    int current;
     string duration;
     string powerlevel;
     string frequency;
