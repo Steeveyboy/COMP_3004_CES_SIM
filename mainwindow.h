@@ -16,6 +16,8 @@ using namespace std;
 #include <sessionRecorder.h>
 #include <string>
 
+#include <QTimer>
+
 //Include statements for other header files go here
 #include "menu.h"
 
@@ -41,6 +43,11 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+
+public slots:
+   void slotFunction();
+
 
 private:
     Ui::MainWindow *ui;
@@ -70,6 +77,8 @@ private:
     string frequency;
     string timer;
     QDateTime sessionStartTime;
+
+    QTimer *timer;
 
 
 private slots:
