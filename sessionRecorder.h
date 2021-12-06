@@ -13,8 +13,8 @@ class sessionRecorder {
 	private:
 		int numRecords;
 		std::vector<record*> records;
-		std::string filepath = "records.txt";
-		std::string date; //possibly an ENUM
+        std::string filepath = "/home/student/CES-Simulation/COMP_3004_CES_SIM/records.txt";
+        std::string date;
 		void storeRecords();
 		void initRecords();
 		void printRecords();
