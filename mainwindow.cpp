@@ -74,6 +74,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->timerLabel->setVisible(false);
     ui->timerSpot->setVisible(false);
     ui->lowBatteryLabel->setVisible(false);
+    ui->timerView->setVisible(false);
+    ui->date_time->setVisible(false);
 
     waveMenu = new Menu("Wave Form Options", {"Alpha", "Beta", "Gamma"});
 
@@ -87,24 +89,10 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::batClicked()
 {
     QString batterylevel = QString::number(ui->progressBar->value());
+    batlvl = batterylevel;
     QString batteryText = "Battery: ";
     QString percent = "%";
     ui->batteryLabel->setText(batteryText + batterylevel + percent);
-
-    if(batterylevel == "5")
-    {
-        cout<<"Warning: BATTERY LOW 5%"<<endl;
-        ui->lowBatteryLabel->setVisible(true);
-        QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
-
-    }
-    if(batterylevel == "2")
-    {
-        cout<<"Warning: Battery at 2%"<<endl;
-        ui->lowBatteryLabel->setVisible(true);
-        QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
-        powerClicked();
-    }
 
 }
 
@@ -190,6 +178,19 @@ void MainWindow::updateTimer()
                    this,
                    tr("CES Machine"),
                    tr("Fault Detected! Shutting Down"));
+   }else if(batlvl == "5")
+   {
+       cout<<"Warning: BATTERY LOW 5%"<<endl;
+       ui->lowBatteryLabel->setVisible(true);
+       QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
+
+   }else if(batlvl == "2")
+   {
+       cout<<"Warning: Battery at 2%"<<endl;
+       ui->lowBatteryLabel->setVisible(true);
+       QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
+       countdown->stop();
+       powerClicked();
    }
    curTime = curTime.addSecs(-1);
    QString timeStr = curTime.toString("hh : mm : ss");
@@ -218,6 +219,8 @@ void MainWindow::powerClicked()
         ui->currentSpot->setVisible(true);
         ui->timerLabel->setVisible(true);
         ui->timerSpot->setVisible(true);
+        ui->timerView->setVisible(true);
+        ui->date_time->setVisible(true);
         menu->setVisible(true);
         powerOn = true;
         return;
@@ -234,6 +237,8 @@ void MainWindow::powerClicked()
         ui->currentSpot->setVisible(false);
         ui->timerLabel->setVisible(false);
         ui->timerSpot->setVisible(false);
+        ui->timerView->setVisible(false);
+        ui->date_time->setVisible(false);
         menu->clear();
         menu->setVisible(false);
         powerOn = false;
@@ -324,6 +329,8 @@ void MainWindow::startClicked()
 
     QString format = "dddd/MM/dd-HH:mm:ss";
 
+    ui->timerView->raise();
+    ui->date_time->raise();
 
 //    cout<<sessionStartTime.toString().toStdString()<<endl;
     if (attached == true)
@@ -362,6 +369,6 @@ void MainWindow::faultClicked()
 {
     string fault = (string)"701";
     QString fault1 = "701";
-    current = stoi(fault);
+    current = fault;
     ui->currentSpot->setText(fault1);
 }
