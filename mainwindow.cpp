@@ -3,6 +3,7 @@
 #include "iostream"
 #include <string>
 #include <sessionRecorder.h>
+#include "menu.h"
 using namespace std;
 #include <QDebug>
 
@@ -15,16 +16,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     // timer
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(slotFunction()));
-    timer->start(1000); //1 second updates
+    countdown = new QTimer(this);
+    connect(countdown, SIGNAL(timeout()), this, SLOT(slotFunction()));
+    countdown->start(1000); //1 second updates
 
 
-    curTimer = -1;
     attached = false;
-
     powerOn = false;
-
     recorder = new sessionRecorder();
 
     scene = new QGraphicsScene(this);
@@ -55,6 +53,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->startButton, SIGNAL(released()), this, SLOT(startClicked()));
     connect(ui->recordButton, SIGNAL(released()), this, SLOT(recordClicked()));
     connect(ui->checkButton, SIGNAL(released()), this, SLOT(confirmClicked()));
+    connect(ui->faultButton, SIGNAL(released()), this, SLOT(faultClicked()));
+    connect(ui->batteryButton, SIGNAL(released()), this, SLOT(batClicked()));
 
 
     menu = ui->mainList;
@@ -62,9 +62,17 @@ MainWindow::MainWindow(QWidget *parent)
 
     waveMenu = new Menu("Wave Form Options", {"Alpha", "Beta", "Gamma"});
     frequencyMenu = new Menu("Frequency Options", {"0.5 Hz", "77 Hz", "100 Hz"});
-    //currentMenu = new Menu("Current Options", {50, 100, 150, 200, 250, 300, 350, 400, 450, 500});
-    //timerMenu = new Menu("Timer Options", {20, 40, 60});
+    currentMenu = new Menu("Current Options", {"50", "100", "150", "200", "250", "300", "350", "400", "450", "500"});
+    timerMenu = new Menu("Timer Options", {"20 minutes", "40 minutes", "60 minutes"});
 
+}
+
+void MainWindow::batClicked()
+{
+    QString batterylevel = QString::number(ui->progressBar->value());
+    QString batteryText = "Battery: ";
+    QString percent = "%";
+    ui->batteryLabel->setText(batteryText + batterylevel + percent);
 }
 
 void MainWindow::recordClicked(){
@@ -94,8 +102,8 @@ void MainWindow::confirmClicked(){
     }
     else if(ui->page->text().toStdString() == "Current"){
         //EDIT CURRENT HERE
-//        current = menu->item(menu->currentRow())->text().toStdString();
-//        ui->currentSpot->setText(menu->item(menu->currentRow())->text());
+          current = menu->item(menu->currentRow())->text().toStdString();
+          ui->currentSpot->setText(menu->item(menu->currentRow())->text());
     }
     else if(ui->page->text().toStdString() == "Timer"){
         timer = menu->item(menu->currentRow())->text().toStdString().substr(0,3);
@@ -106,7 +114,7 @@ void MainWindow::confirmClicked(){
 }
 
 ////This is a helper function to concatinate string. Enjoy!
-//string MainWindow::concatStr(string start, string end){
+//string MainWindow::concatStr(string start, string end){int
 //    cout<<start<<cout<<
 //}
 
@@ -265,4 +273,12 @@ void MainWindow::attachClicked()
 void MainWindow::detachClicked()
 {
     attached = false;
+}
+
+void MainWindow::faultClicked()
+{
+    string fault = (string)"701";
+    QString fault1 = "701";
+    current = fault;
+    ui->currentSpot->setText(fault1);
 }

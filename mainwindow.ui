@@ -208,8 +208,8 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
    <widget class="QPushButton" name="powerButton">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>90</y>
+      <x>380</x>
+      <y>130</y>
       <width>31</width>
       <height>31</height>
      </rect>
@@ -342,11 +342,11 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
      <string>Recording: Off</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="backButton">
+   <widget class="QPushButton" name="faultButton">
     <property name="geometry">
      <rect>
-      <x>90</x>
-      <y>340</y>
+      <x>330</x>
+      <y>130</y>
       <width>31</width>
       <height>31</height>
      </rect>
@@ -360,7 +360,7 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
      </font>
     </property>
     <property name="text">
-     <string>↵</string>
+     <string>X</string>
     </property>
    </widget>
    <widget class="QPushButton" name="checkButton">
@@ -547,7 +547,7 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
      <string notr="true">background-color: rgb(100, 197, 110);</string>
     </property>
     <property name="text">
-     <string> </string>
+     <string/>
     </property>
    </widget>
    <widget class="QLabel" name="timerSpot">
@@ -672,7 +672,7 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
     </property>
     <widget class="QProgressBar" name="progressBar">
      <property name="value">
-      <number>24</number>
+      <number>90</number>
      </property>
     </widget>
     <widget class="QSlider" name="horizontalSlider">
@@ -681,6 +681,23 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
      </property>
     </widget>
    </widget>
+   <widget class="QPushButton" name="batteryButton">
+    <property name="geometry">
+     <rect>
+      <x>440</x>
+      <y>130</y>
+      <width>71</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Set Battery</string>
+    </property>
+   </widget>
+   <zorder>label</zorder>
+   <zorder>date_time</zorder>
+   <zorder>label_2</zorder>
+   <zorder>splitter</zorder>
    <zorder>graphicsView</zorder>
    <zorder>deviceWholeView</zorder>
    <zorder>timerButton</zorder>
@@ -697,14 +714,12 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
    <zorder>frequencyButton</zorder>
    <zorder>recordButton</zorder>
    <zorder>currentButton</zorder>
-   <zorder>backButton</zorder>
+   <zorder>faultButton</zorder>
    <zorder>checkButton</zorder>
    <zorder>batteryLabel</zorder>
    <zorder>recordLabel</zorder>
    <zorder>mainList</zorder>
    <zorder>powerOffView</zorder>
-    
-    
    <zorder>page</zorder>
    <zorder>waveLabel</zorder>
    <zorder>freqLabel</zorder>
@@ -714,6 +729,7 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
    <zorder>freqSpot</zorder>
    <zorder>timerSpot</zorder>
    <zorder>currentSpot</zorder>
+   <zorder>batteryButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
