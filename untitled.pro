@@ -18,11 +18,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    menu.cpp
+    menu.cpp \
+    sessionRecorder.cpp
 
 HEADERS += \
     mainwindow.h \
-    menu.h
+    menu.h \
+    record.h \
+    sessionRecorder.h
 
 FORMS += \
     mainwindow.ui
@@ -31,3 +34,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    records.txt

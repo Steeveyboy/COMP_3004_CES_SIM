@@ -24,7 +24,7 @@ class sessionRecorder {
 		~sessionRecorder();
 		std::vector<record*> getHistory();
 		void deleteRecord(int);
-        void makeRecord(std::string, int, int, std::string, std::string);
+        void makeRecord(std::string, std::string, int, std::string, std::string);
 
 };
 
