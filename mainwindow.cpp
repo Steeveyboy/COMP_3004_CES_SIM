@@ -4,6 +4,8 @@
 #include <string>
 #include <sessionRecorder.h>
 #include "menu.h"
+#include <stdio.h>
+#include <unistd.h>
 using namespace std;
 #include <QDebug>
 #include <QMessageBox>
@@ -62,11 +64,23 @@ MainWindow::MainWindow(QWidget *parent)
 
     menu = ui->mainList;
     menu->setVisible(false);
+    ui->page->setVisible(false);
+    ui->waveLabel->setVisible(false);
+    ui->waveSpot->setVisible(false);
+    ui->freqLabel->setVisible(false);
+    ui->freqSpot->setVisible(false);
+    ui->currentLabel->setVisible(false);
+    ui->currentSpot->setVisible(false);
+    ui->timerLabel->setVisible(false);
+    ui->timerSpot->setVisible(false);
+    ui->lowBatteryLabel->setVisible(false);
 
     waveMenu = new Menu("Wave Form Options", {"Alpha", "Beta", "Gamma"});
-    frequencyMenu = new Menu("Frequency Options", {"0.5 Hz", "77 Hz", "100 Hz"});
+
+    frequencyMenu = new Menu("Frequency Options", {"0.5-Hz", "77-Hz", "100-Hz"});
     currentMenu = new Menu("Current Options", {"50", "100", "150", "200", "250", "300", "350", "400", "450", "500"});
     timerMenu = new Menu("Timer Options", {"20 minutes", "40 minutes", "60 minutes"});
+
 
 }
 
@@ -76,15 +90,33 @@ void MainWindow::batClicked()
     QString batteryText = "Battery: ";
     QString percent = "%";
     ui->batteryLabel->setText(batteryText + batterylevel + percent);
+
+    if(batterylevel == "5")
+    {
+        cout<<"Warning: BATTERY LOW 5%"<<endl;
+        ui->lowBatteryLabel->setVisible(true);
+        QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
+
+    }
+    if(batterylevel == "2")
+    {
+        cout<<"Warning: Battery at 2%"<<endl;
+        ui->lowBatteryLabel->setVisible(true);
+        QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
+        powerClicked();
+    }
+
 }
 
 void MainWindow::recordClicked(){
     //cout<<"record It"<<endl;
     if(recording){
         recording = false;
+        ui->recordLabel->setText("Recording: On");
     }
     else{
         recording = true;
+        ui->recordLabel->setText("Recording: Off");
     }
     //recorder->makeRecord(frequency, powerLevel, waveForm, Duration);
 }
@@ -105,7 +137,7 @@ void MainWindow::confirmClicked(){
     }
     else if(ui->page->text().toStdString() == "Current"){
         //EDIT CURRENT HERE
-          current = menu->item(menu->currentRow())->text().toStdString();
+          current = stoi(menu->item(menu->currentRow())->text().toStdString());
           ui->currentSpot->setText(menu->item(menu->currentRow())->text());
     }
     else if(ui->page->text().toStdString() == "Timer"){
@@ -177,6 +209,15 @@ void MainWindow::powerClicked()
     if(powerOn == false)
     {
         ui->powerOffView->setVisible(false);
+        ui->page->setVisible(true);
+        ui->waveLabel->setVisible(true);
+        ui->waveSpot->setVisible(true);
+        ui->freqLabel->setVisible(true);
+        ui->freqSpot->setVisible(true);
+        ui->currentLabel->setVisible(true);
+        ui->currentSpot->setVisible(true);
+        ui->timerLabel->setVisible(true);
+        ui->timerSpot->setVisible(true);
         menu->setVisible(true);
         powerOn = true;
         return;
@@ -184,6 +225,15 @@ void MainWindow::powerClicked()
     if(powerOn == true)
     {
         ui->powerOffView->setVisible(true);
+        ui->page->setVisible(false);
+        ui->waveLabel->setVisible(false);
+        ui->waveSpot->setVisible(false);
+        ui->freqLabel->setVisible(false);
+        ui->freqSpot->setVisible(false);
+        ui->currentLabel->setVisible(false);
+        ui->currentSpot->setVisible(false);
+        ui->timerLabel->setVisible(false);
+        ui->timerSpot->setVisible(false);
         menu->clear();
         menu->setVisible(false);
         powerOn = false;
@@ -272,6 +322,9 @@ void MainWindow::startClicked()
     sessionStartTime = QDateTime::currentDateTime();
     int startSec = QDateTime::currentSecsSinceEpoch();
 
+    QString format = "dddd/MM/dd-HH:mm:ss";
+
+
 //    cout<<sessionStartTime.toString().toStdString()<<endl;
     if (attached == true)
     {
@@ -288,7 +341,8 @@ void MainWindow::startClicked()
     int duration = endSec - startSec;
 
     if(recording){
-        recorder->makeRecord(frequency, current, duration, sessionStartTime.toString().toStdString(), waveform);
+        cout<<sessionStartTime.toString(format).toStdString()<<endl;
+        recorder->makeRecord(frequency, current, duration, sessionStartTime.toString(format).toStdString(), waveform);
     }
 
 
@@ -308,6 +362,6 @@ void MainWindow::faultClicked()
 {
     string fault = (string)"701";
     QString fault1 = "701";
-    current = fault;
+    current = stoi(fault);
     ui->currentSpot->setText(fault1);
 }
