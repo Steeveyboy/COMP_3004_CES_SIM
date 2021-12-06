@@ -76,7 +76,7 @@ private:
     string frequency;
     string timer;
     QDateTime sessionStartTime;
-
+    QString batlvl;
     QTimer *countdown;
 
 
