@@ -1,5 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+using namespace std;
 
 #include <QMainWindow>
 #include <QGraphicsScene>
@@ -12,6 +13,8 @@
 #include <QStatusBar>
 #include <QVector>
 #include <QtGlobal>
+#include <sessionRecorder.h>
+#include <string>
 
 #include <QTimer>
 
@@ -63,6 +66,17 @@ private:
     bool powerOn;
     int curTimer;
     bool attached;
+    bool recording;
+
+    sessionRecorder *recorder;
+
+    string waveform;
+    int current = 50;
+//    string duration;
+    string powerlevel;
+    string frequency;
+    string timer;
+    QDateTime sessionStartTime;
 
     QTimer *timer;
 
@@ -78,6 +92,8 @@ private slots:
     void startClicked();
     void attachClicked();
     void detachClicked();
+    void recordClicked();
+    void confirmClicked();
 
 
 };
