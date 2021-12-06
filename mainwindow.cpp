@@ -85,8 +85,9 @@ void MainWindow::confirmClicked(){
         ui->freqSpot->setText(menu->item(menu->currentRow())->text());
     }
     else if(ui->page->text().toStdString() == "Current"){
-        current = menu->item(menu->currentRow())->text().toStdString();
-        ui->currentSpot->setText(menu->item(menu->currentRow())->text());
+        //EDIT CURRENT HERE
+//        current = menu->item(menu->currentRow())->text().toStdString();
+//        ui->currentSpot->setText(menu->item(menu->currentRow())->text());
     }
     else if(ui->page->text().toStdString() == "Timer"){
         timer = menu->item(menu->currentRow())->text().toStdString().substr(0,3);
@@ -103,6 +104,7 @@ void MainWindow::confirmClicked(){
 
 MainWindow::~MainWindow()
 {
+    delete recorder;
     delete ui;
 }
 
@@ -209,6 +211,9 @@ void MainWindow::decClicked()
 void MainWindow::startClicked()
 {
     sessionStartTime = QDateTime::currentDateTime();
+    int startSec = QDateTime::currentSecsSinceEpoch();
+
+
 
 //    cout<<sessionStartTime.toString().toStdString()<<endl;
     if (attached)
@@ -217,8 +222,17 @@ void MainWindow::startClicked()
         //during treatment, decrement timer every second, also check current for faults every second, also also check battery level
         //if battery level hits 5% give a warning, if it hits 2% give warning and power off
     }
+    //string fq, int curr, int dur, string date, string wave
 
-    if(){}
+
+    int endSec = QDateTime::currentSecsSinceEpoch();
+    int duration = endSec - startSec;
+
+    if(recording){
+        recorder->makeRecord(frequency, current, duration, sessionStartTime.toString().toStdString(), waveform);
+    }
+
+
 }
 
 void MainWindow::attachClicked()

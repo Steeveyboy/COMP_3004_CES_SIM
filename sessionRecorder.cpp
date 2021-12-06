@@ -12,12 +12,15 @@ sessionRecorder::sessionRecorder() {
 
 void sessionRecorder::initRecords(){
 	ifstream infile(filepath, ios::in);
-	int freq, powerLev, duration, id;
-	string date, wave;
-	while(infile >> freq >> powerLev >> duration >> wave >> date >> id){
-		record *r = new record(freq, powerLev, duration, wave, id, date);
+    int duration, id, curr;
+    string freq, date, wave;
+
+    //std::string fq, int cur, int dur, std::string wave, int newId, std::string dt
+    while(infile >> freq >> curr >> duration >> wave >> date >> id){
+        record *r = new record(freq, curr, duration, wave, id, date);
 		records.push_back(r);
 	}
+    infile.close();
 }
 
 std::vector<record*> sessionRecorder::getHistory(){
@@ -40,13 +43,13 @@ void sessionRecorder::printRecords(){
 	record *r;
 	for(int i=0; i<records.size(); i++){
 		r = records[i];
-		cout<<r->freq<<"	"<<r->powerLevel<<"	"<<r->date<<endl;
+        cout<<r->freq<<"	"<<r->current<<"	"<<r->date<<endl;
 	}
 }
 
-void sessionRecorder::makeRecord(int fq, int pwr, int dur, string wave){
+void sessionRecorder::makeRecord(string fq, int curr, int dur, string date, string wave){
 	//cout<<fq<<"	"<<pwr<<"	"<<dur<<"	"<<records.size()<<endl;
-	record *rec = new record(fq, pwr, dur, wave, records.size(), "date");
+    record *rec = new record(fq, curr, dur, wave, records.size(), date);
 	records.push_back(rec);
 	cout<<records[records.size()-1]->freq<<endl;
 	//storeRecords();
@@ -54,14 +57,14 @@ void sessionRecorder::makeRecord(int fq, int pwr, int dur, string wave){
 }
 
 void sessionRecorder::storeRecords(){
-	fstream fh;
-	fh.open("records.txt");
+    ofstream fh;
+    fh.open(filepath);
 	//fh.open("records.txt", ios::out | ios::trunc);
 	record *r;
 	for(int i=0; i<records.size(); i++){
 		r = records[i];
-		cout<<r->freq<<"	"<<r->powerLevel<<"	"<<r->duration<<"	"<<r->waveform<<"	Date"<<"	"<<r->id<<endl;
-		fh<<r->freq<<"	"<<r->powerLevel<<"	"<<r->duration<<"	"<<r->waveform<<"	Date"<<"	"<<r->id<<endl;
+        cout<<r->freq<<"	"<<r->current<<"	"<<r->duration<<"	"<<r->waveform<<"	Date"<<"	"<<r->id<<endl;
+        fh<<r->freq<<"	"<<r->current<<"	"<<r->duration<<"	"<<r->waveform<<"	Date"<<"	"<<r->id<<endl;
 	}
 	fh.close();
 }

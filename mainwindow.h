@@ -64,8 +64,8 @@ private:
     sessionRecorder *recorder;
 
     string waveform;
-    int current;
-    string duration;
+    int current = 50;
+//    string duration;
     string powerlevel;
     string frequency;
     string timer;
