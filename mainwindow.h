@@ -1,5 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+using namespace std;
 
 #include <QMainWindow>
 #include <QGraphicsScene>
@@ -12,6 +13,10 @@
 #include <QStatusBar>
 #include <QVector>
 #include <QtGlobal>
+#include <sessionRecorder.h>
+#include <string>
+
+#include <QTimer>
 
 //Include statements for other header files go here
 #include "menu.h"
@@ -39,6 +44,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+
+public slots:
+   void slotFunction();
+
+
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
@@ -56,6 +66,19 @@ private:
     bool powerOn;
     int curTimer;
     bool attached;
+    bool recording;
+
+    sessionRecorder *recorder;
+
+    string waveform;
+    int current = 50;
+//    string duration;
+    string powerlevel;
+    string frequency;
+    string timer;
+    QDateTime sessionStartTime;
+
+    QTimer *timer;
 
 
 private slots:
@@ -69,6 +92,8 @@ private slots:
     void startClicked();
     void attachClicked();
     void detachClicked();
+    void recordClicked();
+    void confirmClicked();
 
 
 };
