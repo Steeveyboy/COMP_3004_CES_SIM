@@ -6,17 +6,17 @@
 
 class record {
   public:
-    record(int fq, int pwr, int dur, std::string wave, int newId, std::string dt){
+    record(std::string fq, int cur, int dur, std::string wave, int newId, std::string dt){
       freq = fq;
-      powerLevel = pwr;
+      current = cur;
       duration = dur;
       id = newId;
       date = dt;
       waveform = wave;
       //std::cout<<id<<std::endl;
     };
-    int freq;
-    int powerLevel;
+    std::string freq;
+    int current;
     int duration;
     int id;
     std::string waveform;
