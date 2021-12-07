@@ -64,13 +64,13 @@ private:
     bool powerOn;
     int curTimer;
     bool attached;
-    bool recording;
+    bool recording = false;
     QTime curTime;
 
     sessionRecorder *recorder;
 
     string waveform;
-    int current;
+    string current;
 //    string duration;
     string powerlevel;
     string frequency;

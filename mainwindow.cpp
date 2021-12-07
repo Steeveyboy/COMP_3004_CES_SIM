@@ -100,11 +100,11 @@ void MainWindow::recordClicked(){
     //cout<<"record It"<<endl;
     if(recording){
         recording = false;
-        ui->recordLabel->setText("Recording: On");
+        ui->recordLabel->setText("Recording: Off");
     }
     else{
         recording = true;
-        ui->recordLabel->setText("Recording: Off");
+        ui->recordLabel->setText("Recording: On");
     }
     //recorder->makeRecord(frequency, powerLevel, waveForm, Duration);
 }
@@ -125,7 +125,7 @@ void MainWindow::confirmClicked(){
     }
     else if(ui->page->text().toStdString() == "Current"){
         //EDIT CURRENT HERE
-          current = stoi(menu->item(menu->currentRow())->text().toStdString());
+          current = menu->item(menu->currentRow())->text().toStdString();
           ui->currentSpot->setText(menu->item(menu->currentRow())->text());
     }
     else if(ui->page->text().toStdString() == "Timer"){
@@ -348,7 +348,7 @@ void MainWindow::startClicked()
     int duration = endSec - startSec;
 
     if(recording){
-        cout<<sessionStartTime.toString(format).toStdString()<<endl;
+        cout<<sessionStartTime.toString(format).toStdString()<<"    "<<current<<endl;
         recorder->makeRecord(frequency, current, duration, sessionStartTime.toString(format).toStdString(), waveform);
     }
 
