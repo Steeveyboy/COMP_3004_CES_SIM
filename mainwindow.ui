@@ -612,8 +612,8 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
    <widget class="QLabel" name="date_time">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>100</y>
+      <x>60</x>
+      <y>140</y>
       <width>141</width>
       <height>61</height>
      </rect>
@@ -627,34 +627,13 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
      <string/>
     </property>
    </widget>
-   <widget class="QLabel" name="label_2">
+   <widget class="QGraphicsView" name="timerView">
     <property name="geometry">
      <rect>
-      <x>660</x>
-      <y>80</y>
-      <width>61</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Noto Sans Adlam</family>
-      <pointsize>13</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="text">
-     <string>Timer</string>
-    </property>
-   </widget>
-   <widget class="QGraphicsView" name="graphicsView">
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>50</y>
+      <x>30</x>
+      <y>120</y>
       <width>191</width>
-      <height>141</height>
+      <height>91</height>
      </rect>
     </property>
    </widget>
@@ -694,11 +673,37 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
      <string>Set Battery</string>
     </property>
    </widget>
-   <zorder>label</zorder>
+   <widget class="QLabel" name="lowBatteryLabel">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>120</y>
+      <width>191</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Century Schoolbook L</family>
+      <pointsize>13</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);</string>
+    </property>
+    <property name="text">
+     <string>BATTERY LOW</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
    <zorder>date_time</zorder>
-   <zorder>label_2</zorder>
+   <zorder>timerView</zorder>
+   <zorder>label</zorder>
    <zorder>splitter</zorder>
-   <zorder>graphicsView</zorder>
    <zorder>deviceWholeView</zorder>
    <zorder>timerButton</zorder>
    <zorder>increaseButton</zorder>
@@ -730,6 +735,7 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
    <zorder>timerSpot</zorder>
    <zorder>currentSpot</zorder>
    <zorder>batteryButton</zorder>
+   <zorder>lowBatteryLabel</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
