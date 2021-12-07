@@ -53,7 +53,7 @@ void sessionRecorder::printRecords(){
 	}
 }
 
-void sessionRecorder::makeRecord(string fq, int curr, int dur, string date, string wave){
+void sessionRecorder::makeRecord(string fq, string curr, int dur, string date, string wave){
 	//cout<<fq<<"	"<<pwr<<"	"<<dur<<"	"<<records.size()<<endl;
     record *rec = new record(fq, curr, dur, wave, records.size(), date);
 	records.push_back(rec);
