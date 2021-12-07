@@ -44,7 +44,7 @@ public:
 
 
 public slots:
-   void slotFunction();
+   void updateTimer();
 
 
 private:
@@ -64,7 +64,9 @@ private:
     bool powerOn;
     int curTimer;
     bool attached;
-    bool recording;
+    bool recording = false;
+    QTime curTime;
+    int battCount;
 
     sessionRecorder *recorder;
 
@@ -75,7 +77,7 @@ private:
     string frequency;
     string timer;
     QDateTime sessionStartTime;
-
+    QString batlvl;
     QTimer *countdown;
 
 

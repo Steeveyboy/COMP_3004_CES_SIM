@@ -8,7 +8,7 @@
 #include <unistd.h>
 using namespace std;
 #include <QDebug>
-
+#include <QMessageBox>
 #include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -19,13 +19,16 @@ MainWindow::MainWindow(QWidget *parent)
 
     // timer
     countdown = new QTimer(this);
-    connect(countdown, SIGNAL(timeout()), this, SLOT(slotFunction()));
-    countdown->start(1000); //1 second updates
 
+     //1 second updates
 
+    battCount = 0;
     attached = false;
     powerOn = false;
     recorder = new sessionRecorder();
+    curTime.setHMS(0, 0, 0, 0);
+    batlvl = "100";
+
 
     scene = new QGraphicsScene(this);
     ui->deviceWholeView->setScene(scene);
@@ -57,7 +60,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->checkButton, SIGNAL(released()), this, SLOT(confirmClicked()));
     connect(ui->faultButton, SIGNAL(released()), this, SLOT(faultClicked()));
     connect(ui->batteryButton, SIGNAL(released()), this, SLOT(batClicked()));
-
+    connect(countdown, SIGNAL(timeout()), this, SLOT(updateTimer()));
+    connect(ui->attachButton, SIGNAL(released()), this, SLOT(attachClicked()));
+    connect(ui->detachButton, SIGNAL(released()), this, SLOT(detachClicked()));
 
     menu = ui->mainList;
     menu->setVisible(false);
@@ -71,35 +76,26 @@ MainWindow::MainWindow(QWidget *parent)
     ui->timerLabel->setVisible(false);
     ui->timerSpot->setVisible(false);
     ui->lowBatteryLabel->setVisible(false);
+    ui->timerView->setVisible(false);
+    ui->date_time->setVisible(false);
+    ui->attIco->setVisible(true);
 
     waveMenu = new Menu("Wave Form Options", {"Alpha", "Beta", "Gamma"});
-    frequencyMenu = new Menu("Frequency Options", {"0.5 Hz", "77 Hz", "100 Hz"});
+
+    frequencyMenu = new Menu("Frequency Options", {"0.5-Hz", "77-Hz", "100-Hz"});
     currentMenu = new Menu("Current Options", {"50", "100", "150", "200", "250", "300", "350", "400", "450", "500"});
     timerMenu = new Menu("Timer Options", {"20 minutes", "40 minutes", "60 minutes"});
+
 
 }
 
 void MainWindow::batClicked()
 {
     QString batterylevel = QString::number(ui->progressBar->value());
+    batlvl = batterylevel;
     QString batteryText = "Battery: ";
     QString percent = "%";
     ui->batteryLabel->setText(batteryText + batterylevel + percent);
-
-    if(batterylevel == "5")
-    {
-        cout<<"Warning: BATTERY LOW 5%"<<endl;
-        ui->lowBatteryLabel->setVisible(true);
-        QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
-
-    }
-    if(batterylevel == "2")
-    {
-        cout<<"Warning: Battery at 2%"<<endl;
-        ui->lowBatteryLabel->setVisible(true);
-        QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
-        powerClicked();
-    }
 
 }
 
@@ -107,11 +103,11 @@ void MainWindow::recordClicked(){
     //cout<<"record It"<<endl;
     if(recording){
         recording = false;
-        ui->recordLabel->setText("Recording: On");
+        ui->recordLabel->setText("Recording: Off");
     }
     else{
         recording = true;
-        ui->recordLabel->setText("Recording: Off");
+        ui->recordLabel->setText("Recording: On");
     }
     //recorder->makeRecord(frequency, powerLevel, waveForm, Duration);
 }
@@ -138,6 +134,20 @@ void MainWindow::confirmClicked(){
     else if(ui->page->text().toStdString() == "Timer"){
         timer = menu->item(menu->currentRow())->text().toStdString().substr(0,3);
         ui->timerSpot->setText(QString::fromStdString(timer));
+        // string output of time
+        QTime time;
+        QString sixty = "60 ";
+        if (ui->timerSpot->text() == sixty)
+        {
+            printf("60");
+            time.setHMS(1, 0, 0, 0);
+        }else
+        {
+            time.setHMS(0, ui->timerSpot->text().toInt(), 0, 0);
+        }
+        QString timeText = time.toString("hh : mm : ss");
+        ui->date_time->setText(timeText);
+        curTime = time;
     }
 
     //cout<<menu->item(menu->currentRow())->text().toStdString()<<"  "<<endl;
@@ -156,14 +166,60 @@ MainWindow::~MainWindow()
 
 
 // timer
-void MainWindow::slotFunction()
+void MainWindow::updateTimer()
 {
    qDebug() <<"Testing frequent update...";
+   if(attached == false)
+   {
+       countdown->stop();
+       ui->date_time->lower();
+       ui->timerView->lower();
+   }else if(current == (string)"701")
+   {
+       countdown->stop();
+       powerClicked();
+       ui->powerButton->setEnabled(false);
+       QMessageBox::warning(
+                   this,
+                   tr("CES Machine"),
+                   tr("Fault Detected! Shutting Down"));
+       ui->date_time->lower();
+       ui->timerView->lower();
+   }else if(batlvl == "5")
+   {
+       cout<<"Warning: BATTERY LOW 5%"<<endl;
+       ui->lowBatteryLabel->setVisible(true);
+       QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
 
-   // string output of time
-   QTime time = QTime::currentTime();
-   QString timeText = time.toString("hh : mm : ss");
-   ui->date_time->setText(timeText);
+   }else if(batlvl == "2")
+   {
+       cout<<"Warning: Battery at 2%"<<endl;
+       ui->lowBatteryLabel->setVisible(true);
+       QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
+       countdown->stop();
+       ui->date_time->lower();
+       ui->timerView->lower();
+       powerClicked();
+   }
+
+   if(battCount < 9)
+   {
+       battCount++;
+   }else
+   {
+       battCount = 0;
+       int batterylevel = batlvl.toInt();
+       batterylevel--;
+       batlvl = QString::number(batterylevel);
+       QString batteryText = "Battery: ";
+       QString percent = "%";
+       ui->batteryLabel->setText(batteryText + batlvl + percent);
+   }
+
+   curTime = curTime.addSecs(-1);
+   QString timeStr = curTime.toString("hh : mm : ss");
+   ui->date_time->setText(timeStr);
+
 }
 
 
@@ -183,10 +239,13 @@ void MainWindow::powerClicked()
         ui->waveSpot->setVisible(true);
         ui->freqLabel->setVisible(true);
         ui->freqSpot->setVisible(true);
+        ui->attIco->setVisible(true);
         ui->currentLabel->setVisible(true);
         ui->currentSpot->setVisible(true);
         ui->timerLabel->setVisible(true);
         ui->timerSpot->setVisible(true);
+        ui->timerView->setVisible(true);
+        ui->date_time->setVisible(true);
         menu->setVisible(true);
         powerOn = true;
         return;
@@ -199,10 +258,13 @@ void MainWindow::powerClicked()
         ui->waveSpot->setVisible(false);
         ui->freqLabel->setVisible(false);
         ui->freqSpot->setVisible(false);
+        ui->attIco->setVisible(true);
         ui->currentLabel->setVisible(false);
         ui->currentSpot->setVisible(false);
         ui->timerLabel->setVisible(false);
         ui->timerSpot->setVisible(false);
+        ui->timerView->setVisible(false);
+        ui->date_time->setVisible(false);
         menu->clear();
         menu->setVisible(false);
         powerOn = false;
@@ -291,11 +353,16 @@ void MainWindow::startClicked()
     sessionStartTime = QDateTime::currentDateTime();
     int startSec = QDateTime::currentSecsSinceEpoch();
 
+    QString format = "dddd/MM/dd-HH:mm:ss";
 
+    ui->timerView->raise();
+    ui->date_time->raise();
 
 //    cout<<sessionStartTime.toString().toStdString()<<endl;
-    if (attached)
+    if (attached == true)
     {
+        countdown->start(1000);
+
         //during treatment, check every second to see if electrodes connected, if they ever become disconnected stop timer
         //during treatment, decrement timer every second, also check current for faults every second, also also check battery level
         //if battery level hits 5% give a warning, if it hits 2% give warning and power off
@@ -307,7 +374,8 @@ void MainWindow::startClicked()
     int duration = endSec - startSec;
 
     if(recording){
-        recorder->makeRecord(frequency, current, duration, sessionStartTime.toString().toStdString(), waveform);
+        cout<<sessionStartTime.toString(format).toStdString()<<"    "<<current<<endl;
+        recorder->makeRecord(frequency, current, duration, sessionStartTime.toString(format).toStdString(), waveform);
     }
 
 
@@ -316,11 +384,17 @@ void MainWindow::startClicked()
 void MainWindow::attachClicked()
 {
     attached = true;
+    ui->attachButton->setEnabled(false);
+    ui->detachButton->setEnabled(true);
+    ui->attIco->raise();
 }
 
 void MainWindow::detachClicked()
 {
     attached = false;
+    ui->attachButton->setEnabled(true);
+    ui->detachButton->setEnabled(false);
+    ui->attIco->lower();
 }
 
 void MainWindow::faultClicked()

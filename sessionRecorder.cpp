@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "sessionRecorder.h"
+#include <sstream>
 #include "record.h"
 using namespace std;
 
@@ -12,11 +13,16 @@ sessionRecorder::sessionRecorder() {
 
 void sessionRecorder::initRecords(){
 	ifstream infile(filepath, ios::in);
+    string line;
     int duration, id;
-    string freq, date, wave, curr;
+    string curr, freq, date, wave;
 
     //std::string fq, int cur, int dur, std::string wave, int newId, std::string dt
-    while(infile >> freq >> curr >> duration >> wave >> date >> id){
+    while(getline(infile, line, '\n')){
+//        infile >> freq >> curr >> duration >> wave >> date >> id
+        stringstream ss(line);
+        ss >> freq >> curr >> duration >> wave >> date >> id;
+        cout<<"extract"<<endl;
         record *r = new record(freq, curr, duration, wave, id, date);
 		records.push_back(r);
 	}
@@ -51,7 +57,7 @@ void sessionRecorder::makeRecord(string fq, string curr, int dur, string date, s
 	//cout<<fq<<"	"<<pwr<<"	"<<dur<<"	"<<records.size()<<endl;
     record *rec = new record(fq, curr, dur, wave, records.size(), date);
 	records.push_back(rec);
-	cout<<records[records.size()-1]->freq<<endl;
+    //cout<<records[records.size()-1]->freq<<"    "<<records[records.size()-1]->date<<endl;
 	//storeRecords();
 	numRecords++;
 }
@@ -63,8 +69,8 @@ void sessionRecorder::storeRecords(){
 	record *r;
 	for(int i=0; i<records.size(); i++){
 		r = records[i];
-        cout<<r->freq<<"	"<<r->current<<"	"<<r->duration<<"	"<<r->waveform<<"	Date"<<"	"<<r->id<<endl;
-        fh<<r->freq<<"	"<<r->current<<"	"<<r->duration<<"	"<<r->waveform<<"	Date"<<"	"<<r->id<<endl;
+        cout<<r->freq<<"	"<<r->current<<"	"<<r->duration<<"	"<<r->waveform<<"	"<<r->date<<"	"<<r->id<<endl;
+        fh<<r->freq<<"	"<<r->current<<"	"<<r->duration<<"	"<<r->waveform<<"	"<<r->date<<"	"<<r->id<<endl;
 	}
 	fh.close();
 }
