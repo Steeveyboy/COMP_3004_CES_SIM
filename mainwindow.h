@@ -69,7 +69,7 @@ private:
     sessionRecorder *recorder;
 
     string waveform;
-    string current;
+    int current;
 //    string duration;
     string powerlevel;
     string frequency;
