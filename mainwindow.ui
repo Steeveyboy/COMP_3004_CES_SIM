@@ -760,8 +760,8 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
    <zorder>timerSpot</zorder>
    <zorder>currentSpot</zorder>
    <zorder>batteryButton</zorder>
-   <zorder>lowBatteryLabel</zorder>
    <zorder>attIco</zorder>
+   <zorder>lowBatteryLabel</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
