@@ -81,7 +81,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->attIco->setVisible(true);
 
     waveMenu = new Menu("Wave Form Options", {"Alpha", "Beta", "Gamma"});
-
     frequencyMenu = new Menu("Frequency Options", {"0.5-Hz", "77-Hz", "100-Hz"});
     currentMenu = new Menu("Current Options", {"50", "100", "150", "200", "250", "300", "350", "400", "450", "500"});
     timerMenu = new Menu("Timer Options", {"20 minutes", "40 minutes", "60 minutes"});
@@ -96,6 +95,24 @@ void MainWindow::batClicked()
     QString batteryText = "Battery: ";
     QString percent = "%";
     ui->batteryLabel->setText(batteryText + batterylevel + percent);
+    if(batterylevel == '5')
+    {
+        ui->lowBatteryLabel->setVisible(true);
+        cout<<"BATERY AT: "<<endl;
+        //QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
+        //sleep(5);
+        //ui->lowBatteryLabel->setVisible(false);
+    }
+    else if(batterylevel == '2')
+    {
+        ui->lowBatteryLabel->setVisible(true);
+
+    }
+    else
+    {
+        ui->lowBatteryLabel->setVisible(false);
+    }
+
 
 }
 
@@ -185,13 +202,15 @@ void MainWindow::updateTimer()
                    tr("Fault Detected! Shutting Down"));
        ui->date_time->lower();
        ui->timerView->lower();
-   }else if(batlvl == "5")
+   }
+   if(batlvl == '5')
    {
        cout<<"Warning: BATTERY LOW 5%"<<endl;
        ui->lowBatteryLabel->setVisible(true);
-       QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
+       //QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
 
-   }else if(batlvl == "2")
+   }
+   if(batlvl == '2')
    {
        cout<<"Warning: Battery at 2%"<<endl;
        ui->lowBatteryLabel->setVisible(true);
