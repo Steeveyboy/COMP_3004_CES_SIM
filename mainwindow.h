@@ -66,6 +66,7 @@ private:
     bool attached;
     bool recording;
     QTime curTime;
+    int battCount;
 
     sessionRecorder *recorder;
 

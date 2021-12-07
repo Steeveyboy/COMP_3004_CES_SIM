@@ -22,11 +22,13 @@ MainWindow::MainWindow(QWidget *parent)
 
      //1 second updates
 
-
+    battCount = 0;
     attached = false;
     powerOn = false;
     recorder = new sessionRecorder();
     curTime.setHMS(0, 0, 0, 0);
+    batlvl = "100";
+
 
     scene = new QGraphicsScene(this);
     ui->deviceWholeView->setScene(scene);
@@ -76,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lowBatteryLabel->setVisible(false);
     ui->timerView->setVisible(false);
     ui->date_time->setVisible(false);
+    ui->attIco->setVisible(true);
 
     waveMenu = new Menu("Wave Form Options", {"Alpha", "Beta", "Gamma"});
 
@@ -169,6 +172,8 @@ void MainWindow::updateTimer()
    if(attached == false)
    {
        countdown->stop();
+       ui->date_time->lower();
+       ui->timerView->lower();
    }else if(current == (string)"701")
    {
        countdown->stop();
@@ -178,6 +183,8 @@ void MainWindow::updateTimer()
                    this,
                    tr("CES Machine"),
                    tr("Fault Detected! Shutting Down"));
+       ui->date_time->lower();
+       ui->timerView->lower();
    }else if(batlvl == "5")
    {
        cout<<"Warning: BATTERY LOW 5%"<<endl;
@@ -190,8 +197,25 @@ void MainWindow::updateTimer()
        ui->lowBatteryLabel->setVisible(true);
        QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
        countdown->stop();
+       ui->date_time->lower();
+       ui->timerView->lower();
        powerClicked();
    }
+
+   if(battCount < 9)
+   {
+       battCount++;
+   }else
+   {
+       battCount = 0;
+       int batterylevel = batlvl.toInt();
+       batterylevel--;
+       batlvl = QString::number(batterylevel);
+       QString batteryText = "Battery: ";
+       QString percent = "%";
+       ui->batteryLabel->setText(batteryText + batlvl + percent);
+   }
+
    curTime = curTime.addSecs(-1);
    QString timeStr = curTime.toString("hh : mm : ss");
    ui->date_time->setText(timeStr);
@@ -215,6 +239,7 @@ void MainWindow::powerClicked()
         ui->waveSpot->setVisible(true);
         ui->freqLabel->setVisible(true);
         ui->freqSpot->setVisible(true);
+        ui->attIco->setVisible(true);
         ui->currentLabel->setVisible(true);
         ui->currentSpot->setVisible(true);
         ui->timerLabel->setVisible(true);
@@ -233,6 +258,7 @@ void MainWindow::powerClicked()
         ui->waveSpot->setVisible(false);
         ui->freqLabel->setVisible(false);
         ui->freqSpot->setVisible(false);
+        ui->attIco->setVisible(true);
         ui->currentLabel->setVisible(false);
         ui->currentSpot->setVisible(false);
         ui->timerLabel->setVisible(false);
@@ -358,11 +384,17 @@ void MainWindow::startClicked()
 void MainWindow::attachClicked()
 {
     attached = true;
+    ui->attachButton->setEnabled(false);
+    ui->detachButton->setEnabled(true);
+    ui->attIco->raise();
 }
 
 void MainWindow::detachClicked()
 {
     attached = false;
+    ui->attachButton->setEnabled(true);
+    ui->detachButton->setEnabled(false);
+    ui->attIco->lower();
 }
 
 void MainWindow::faultClicked()
