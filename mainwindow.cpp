@@ -221,7 +221,7 @@ void MainWindow::updateTimer()
        cout<<"Warning: BATTERY LOW 5%"<<endl;
        ui->lowBatteryLabel->setVisible(true);
        ui->lowBatteryLabel->raise();
-       //QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
+
 
    }
    if(batlvl == '2')
@@ -430,6 +430,8 @@ void MainWindow::startClicked()
         countdown->start(1000);
         inacTimer->stop();
     }
+
+
     //string fq, int curr, int dur, string date, string wave
 
 

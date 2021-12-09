@@ -22,10 +22,60 @@ using namespace std;
 /* Class purpose: The mainwindow is the main control class for the whole program
  *
  * Data Members:
+ * For UI Purposes: All of the below are used for visual purposes witht he QGraphics
+ *      MainWindow *ui
+        QGraphicsScene *scene
+        QGraphicsScene *scene2
+        QGraphicsScene *scene3
+        QGraphicsEllipseItem * ellipse
+        QGraphicsRectItem *rectangle
+        QGraphicsRectItem *rectangle2
+        QGraphicsRectItem *rectangle3
+        QListWidget *menu
+ *
+ * Menu: 4 menu instances used for user to select therapy settings
+        Menu *waveMenu
+        Menu *frequencyMenu
+        Menu *currentMenu
+        Menu *timerMenu
+
+ * Boolean Variables: Mainly used to check if user has already selected a button
+ *      bool powerOn
+ *      bool attached
+        bool recording
+
+ * String Variables: Used to store users selections
+ *      string waveform
+        string current
+        string powerlevel
+        string frequency
+        string timer
+
+* Battery Data Members: To Track, Set and Display Battery Levels
+       int battCount
+       QString batlvl
+
+* Record Data Members: Stores values needed for 'records.txt'
+        sessionRecorder *recorder
+        QDateTime sessionStartTime
+
+*Timer Variables: Stores selected timer value and QTime value
+        QTimer *countdown
+        int curTimer
+        QTime curTime
+
  *
  *
  * Class Functions:
- *
+ *  void powerClicked() -> Turns Device on and off
+    Menu Options:
+       void waveLengthClicked(); void frequencyClicked(); void currentClicked(); void timerClicked(); void incClicked(); void decClicked(); void confirmClicked();
+
+    Session Functionalities:
+       void startClicked(); void attachClicked(); void detachClicked(); void recordClicked();
+
+    Testing Functionalities:
+        void faultClicked(); void batClicked(); inactivityTimer()
  *
  */
 
@@ -64,7 +114,7 @@ private:
     bool powerOn;
     int curTimer;
     bool attached;
-    bool recording;
+    bool recording = false;
     QTime curTime;
     int battCount;
 
