@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // timer
     countdown = new QTimer(this);
+    inacTimer = new QTimer(this);
 
      //1 second updates
 
@@ -28,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     recorder = new sessionRecorder();
     curTime.setHMS(0, 0, 0, 0);
     batlvl = "100";
+    recording = false;
 
 
     scene = new QGraphicsScene(this);
@@ -63,6 +65,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(countdown, SIGNAL(timeout()), this, SLOT(updateTimer()));
     connect(ui->attachButton, SIGNAL(released()), this, SLOT(attachClicked()));
     connect(ui->detachButton, SIGNAL(released()), this, SLOT(detachClicked()));
+    connect(inacTimer, SIGNAL(timeout()), this, SLOT(inactivityTimer()));
 
     menu = ui->mainList;
     menu->setVisible(false);
@@ -81,7 +84,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->attIco->setVisible(true);
 
     waveMenu = new Menu("Wave Form Options", {"Alpha", "Beta", "Gamma"});
-
     frequencyMenu = new Menu("Frequency Options", {"0.5-Hz", "77-Hz", "100-Hz"});
     currentMenu = new Menu("Current Options", {"50", "100", "150", "200", "250", "300", "350", "400", "450", "500"});
     timerMenu = new Menu("Timer Options", {"20 minutes", "40 minutes", "60 minutes"});
@@ -96,6 +98,25 @@ void MainWindow::batClicked()
     QString batteryText = "Battery: ";
     QString percent = "%";
     ui->batteryLabel->setText(batteryText + batterylevel + percent);
+    if(batterylevel == '5')
+    {
+        ui->lowBatteryLabel->setVisible(true);
+        cout<<"BATERY AT: "<<endl;
+        //QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
+        //sleep(5);
+        //ui->lowBatteryLabel->setVisible(false);
+    }
+    else if(batterylevel == '2')
+    {
+        ui->lowBatteryLabel->setVisible(true);
+        powerClicked();
+
+    }
+    else
+    {
+        ui->lowBatteryLabel->setVisible(false);
+    }
+
 
 }
 
@@ -103,11 +124,11 @@ void MainWindow::recordClicked(){
     //cout<<"record It"<<endl;
     if(recording){
         recording = false;
-        ui->recordLabel->setText("Recording: On");
+        ui->recordLabel->setText("Recording: Off");
     }
     else{
         recording = true;
-        ui->recordLabel->setText("Recording: Off");
+        ui->recordLabel->setText("Recording: On");
     }
     //recorder->makeRecord(frequency, powerLevel, waveForm, Duration);
 }
@@ -128,7 +149,7 @@ void MainWindow::confirmClicked(){
     }
     else if(ui->page->text().toStdString() == "Current"){
         //EDIT CURRENT HERE
-          current = stoi(menu->item(menu->currentRow())->text().toStdString());
+          current = menu->item(menu->currentRow())->text().toStdString();
           ui->currentSpot->setText(menu->item(menu->currentRow())->text());
     }
     else if(ui->page->text().toStdString() == "Timer"){
@@ -174,6 +195,15 @@ void MainWindow::updateTimer()
        countdown->stop();
        ui->date_time->lower();
        ui->timerView->lower();
+
+
+       /*For testing purposes, the proper length of time for the inactivity timer has been commented out
+        * and replaced with a 5 minute interval. The 1800000 line is the actual interval if the inactivity
+        * timer was being called for 30 minutes of inactivity
+        */
+       //inacTimer->start(1800000);
+       inacTimer->start(300000);
+
    }else if(current == (string)"701")
    {
        countdown->stop();
@@ -185,13 +215,16 @@ void MainWindow::updateTimer()
                    tr("Fault Detected! Shutting Down"));
        ui->date_time->lower();
        ui->timerView->lower();
-   }else if(batlvl == "5")
+   }
+   if(batlvl == '5')
    {
        cout<<"Warning: BATTERY LOW 5%"<<endl;
        ui->lowBatteryLabel->setVisible(true);
-       QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
+       ui->lowBatteryLabel->raise();
+       //QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
 
-   }else if(batlvl == "2")
+   }
+   if(batlvl == '2')
    {
        cout<<"Warning: Battery at 2%"<<endl;
        ui->lowBatteryLabel->setVisible(true);
@@ -219,6 +252,38 @@ void MainWindow::updateTimer()
    curTime = curTime.addSecs(-1);
    QString timeStr = curTime.toString("hh : mm : ss");
    ui->date_time->setText(timeStr);
+
+   //QTime set to 0 for comparison
+   QTime *comp = new QTime(0, 0, 0, 0);
+   if(curTime == comp)
+   {
+       countdown->stop();
+       //record if recording
+
+       /*For testing purposes, the proper length of time for the inactivity timer has been commented out
+        * and replaced with a 5 minute interval. The 1800000 line is the actual interval if the inactivity
+        * timer was being called for 30 minutes of inactivity
+        */
+       //inacTimer->start(1800000);
+       inacTimer->start(300000);
+
+       ui->date_time->lower();
+       ui->timerView->lower();
+
+       curTimer = 0;
+       recording = false;
+       curTime.setHMS(0, 0, 0, 0);
+       waveform = (string)"";
+       ui->waveSpot->setText("");
+       current = (string)"";
+       ui->currentSpot->setText("");
+       powerlevel = (string)"";
+       frequency = (string)"";
+       ui->freqSpot->setText("");
+       timer = (string)"";
+       ui->timerSpot->setText("");
+       battCount = 0;
+   }
 
 }
 
@@ -355,17 +420,15 @@ void MainWindow::startClicked()
 
     QString format = "dddd/MM/dd-HH:mm:ss";
 
-    ui->timerView->raise();
-    ui->date_time->raise();
+
 
 //    cout<<sessionStartTime.toString().toStdString()<<endl;
     if (attached == true)
     {
+        ui->timerView->raise();
+        ui->date_time->raise();
         countdown->start(1000);
-
-        //during treatment, check every second to see if electrodes connected, if they ever become disconnected stop timer
-        //during treatment, decrement timer every second, also check current for faults every second, also also check battery level
-        //if battery level hits 5% give a warning, if it hits 2% give warning and power off
+        inacTimer->stop();
     }
     //string fq, int curr, int dur, string date, string wave
 
@@ -374,7 +437,7 @@ void MainWindow::startClicked()
     int duration = endSec - startSec;
 
     if(recording){
-        cout<<sessionStartTime.toString(format).toStdString()<<endl;
+        cout<<sessionStartTime.toString(format).toStdString()<<"    "<<current<<endl;
         recorder->makeRecord(frequency, current, duration, sessionStartTime.toString(format).toStdString(), waveform);
     }
 
@@ -403,4 +466,25 @@ void MainWindow::faultClicked()
     QString fault1 = "701";
     current = fault;
     ui->currentSpot->setText(fault1);
+}
+
+void MainWindow::inactivityTimer()
+{
+    countdown->stop();
+    ui->date_time->lower();
+    ui->timerView->lower();
+    curTimer = 0;
+    recording = false;
+    curTime.setHMS(0, 0, 0, 0);
+    waveform = (string)"";
+    ui->waveSpot->setText("");
+    current = (string)"";
+    ui->currentSpot->setText("");
+    powerlevel = (string)"";
+    frequency = (string)"";
+    ui->freqSpot->setText("");
+    timer = (string)"";
+    ui->timerSpot->setText("");
+    battCount = 0;
+    powerClicked();
 }
