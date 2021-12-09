@@ -253,9 +253,7 @@ void MainWindow::updateTimer()
    QString timeStr = curTime.toString("hh : mm : ss");
    ui->date_time->setText(timeStr);
 
-   //QTime set to 0 for comparison
-   QTime *comp = new QTime(0, 0, 0, 0);
-   if(curTime == comp)
+   if(curTime.minute() == 0)
    {
        countdown->stop();
        //record if recording
