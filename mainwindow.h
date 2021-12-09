@@ -129,6 +129,7 @@ private:
     QDateTime sessionStartTime;
     QString batlvl;
     QTimer *countdown;
+    QTimer *inacTimer;
 
 
 private slots:
@@ -146,6 +147,7 @@ private slots:
     void confirmClicked();
     void faultClicked();
     void batClicked();
+    void inactivityTimer();
 
 
 };
