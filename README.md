@@ -1,7 +1,7 @@
 # COMP_3004_CES_SIM
 TEAM MEMBERS:
 
-Yutaek Hwang - 101073993 
+Yutaek Hwang - 101073993 \n
 Tania Mathew -  101143502
 Jonathan Steeves - 101120302
 Zachary Matheson - 101049617
