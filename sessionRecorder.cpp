@@ -65,7 +65,7 @@ void sessionRecorder::makeRecord(string fq, string curr, int dur, string date, s
 void sessionRecorder::storeRecords(){
     ofstream fh;
     fh.open(filepath);
-	//fh.open("records.txt", ios::out | ios::trunc);
+    cout<<"STORING RECORDS: "<<endl;
 	record *r;
 	for(int i=0; i<records.size(); i++){
 		r = records[i];

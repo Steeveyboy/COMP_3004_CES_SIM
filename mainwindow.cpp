@@ -137,7 +137,7 @@ void MainWindow::confirmClicked(){
 
     if(menu->currentRow() < 0){ return; }
 
-    cout<<"confirm It"<<endl;
+    //cout<<"confirm It"<<endl;
     if(ui->page->text().toStdString() == "Wavelength"){
         waveform = menu->item(menu->currentRow())->text().toStdString();
         //cout<<waveform<<endl;
@@ -207,6 +207,7 @@ void MainWindow::updateTimer()
    }else if(current == (string)"701")
    {
        countdown->stop();
+       recordSession();
        powerClicked();
        ui->powerButton->setEnabled(false);
        QMessageBox::warning(
@@ -215,7 +216,7 @@ void MainWindow::updateTimer()
                    tr("Fault Detected! Shutting Down"));
        ui->date_time->lower();
        ui->timerView->lower();
-       recordSession();
+
    }
    if(batlvl == '5')
    {
@@ -436,7 +437,7 @@ void MainWindow::recordSession(){
     int duration = endSec - startSecond;
 
     if(recording){
-        cout<<sessionStartTime.toString(format).toStdString()<<"    "<<current<<endl;
+        //cout<<sessionStartTime.toString(format).toStdString()<<"    "<<current<<"   "<<waveform<<"  "<<frequency<<endl;
         recorder->makeRecord(frequency, current, duration, sessionStartTime.toString(format).toStdString(), waveform);
     }
 }
