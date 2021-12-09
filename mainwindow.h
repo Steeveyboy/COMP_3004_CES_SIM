@@ -117,6 +117,7 @@ private:
     bool recording = false;
     QTime curTime;
     int battCount;
+    int startSecond;
 
     sessionRecorder *recorder;
 
@@ -130,6 +131,8 @@ private:
     QString batlvl;
     QTimer *countdown;
     QTimer *inacTimer;
+
+    void recordSession();
 
 
 private slots:

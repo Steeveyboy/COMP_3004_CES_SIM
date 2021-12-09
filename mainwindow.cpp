@@ -215,6 +215,7 @@ void MainWindow::updateTimer()
                    tr("Fault Detected! Shutting Down"));
        ui->date_time->lower();
        ui->timerView->lower();
+       recordSession();
    }
    if(batlvl == '5')
    {
@@ -233,6 +234,7 @@ void MainWindow::updateTimer()
        ui->date_time->lower();
        ui->timerView->lower();
        powerClicked();
+       recordSession();
    }
 
    if(battCount < 9)
@@ -256,6 +258,7 @@ void MainWindow::updateTimer()
    if(curTime.minute() == 0)
    {
        countdown->stop();
+       recordSession();
        //record if recording
 
        /*For testing purposes, the proper length of time for the inactivity timer has been commented out
@@ -414,13 +417,8 @@ void MainWindow::decClicked()
 void MainWindow::startClicked()
 {
     sessionStartTime = QDateTime::currentDateTime();
-    int startSec = QDateTime::currentSecsSinceEpoch();
+    startSecond = QDateTime::currentSecsSinceEpoch();
 
-    QString format = "dddd/MM/dd-HH:mm:ss";
-
-
-
-//    cout<<sessionStartTime.toString().toStdString()<<endl;
     if (attached == true)
     {
         ui->timerView->raise();
@@ -429,19 +427,18 @@ void MainWindow::startClicked()
         inacTimer->stop();
     }
 
+}
 
-    //string fq, int curr, int dur, string date, string wave
+void MainWindow::recordSession(){
 
-
+    QString format = "dddd/MM/dd-HH:mm:ss";
     int endSec = QDateTime::currentSecsSinceEpoch();
-    int duration = endSec - startSec;
+    int duration = endSec - startSecond;
 
     if(recording){
         cout<<sessionStartTime.toString(format).toStdString()<<"    "<<current<<endl;
         recorder->makeRecord(frequency, current, duration, sessionStartTime.toString(format).toStdString(), waveform);
     }
-
-
 }
 
 void MainWindow::attachClicked()
@@ -471,6 +468,7 @@ void MainWindow::faultClicked()
 void MainWindow::inactivityTimer()
 {
     countdown->stop();
+    recordSession();
     ui->date_time->lower();
     ui->timerView->lower();
     curTimer = 0;
