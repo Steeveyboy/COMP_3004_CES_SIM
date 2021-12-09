@@ -431,7 +431,7 @@ void MainWindow::startClicked()
 }
 
 void MainWindow::recordSession(){
-
+    cout<<"recording session"<<endl;
     QString format = "dddd/MM/dd-HH:mm:ss";
     int endSec = QDateTime::currentSecsSinceEpoch();
     int duration = endSec - startSecond;
