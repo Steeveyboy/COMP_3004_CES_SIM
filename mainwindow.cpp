@@ -106,6 +106,7 @@ void MainWindow::batClicked()
     else if(batterylevel == '2')
     {
         ui->lowBatteryLabel->setVisible(true);
+        powerClicked();
 
     }
     else
@@ -386,6 +387,8 @@ void MainWindow::startClicked()
         //during treatment, decrement timer every second, also check current for faults every second, also also check battery level
         //if battery level hits 5% give a warning, if it hits 2% give warning and power off
     }
+
+
     //string fq, int curr, int dur, string date, string wave
 
 
