@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // timer
     countdown = new QTimer(this);
+    inacTimer = new QTimer(this);
 
      //1 second updates
 
@@ -28,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent)
     recorder = new sessionRecorder();
     curTime.setHMS(0, 0, 0, 0);
     batlvl = "100";
+    recording = false;
 
 
     scene = new QGraphicsScene(this);
@@ -63,6 +65,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(countdown, SIGNAL(timeout()), this, SLOT(updateTimer()));
     connect(ui->attachButton, SIGNAL(released()), this, SLOT(attachClicked()));
     connect(ui->detachButton, SIGNAL(released()), this, SLOT(detachClicked()));
+    connect(inacTimer, SIGNAL(timeout()), this, SLOT(inactivityTimer()));
 
     menu = ui->mainList;
     menu->setVisible(false);
@@ -192,6 +195,15 @@ void MainWindow::updateTimer()
        countdown->stop();
        ui->date_time->lower();
        ui->timerView->lower();
+
+
+       /*For testing purposes, the proper length of time for the inactivity timer has been commented out
+        * and replaced with a 5 minute interval. The 1800000 line is the actual interval if the inactivity
+        * timer was being called for 30 minutes of inactivity
+        */
+       //inacTimer->start(1800000);
+       inacTimer->start(300000);
+
    }else if(current == (string)"701")
    {
        countdown->stop();
@@ -208,7 +220,8 @@ void MainWindow::updateTimer()
    {
        cout<<"Warning: BATTERY LOW 5%"<<endl;
        ui->lowBatteryLabel->setVisible(true);
-       //QTimer::singleShot(5000, ui->lowBatteryLabel, &QLabel::hide);
+       ui->lowBatteryLabel->raise();
+
 
    }
    if(batlvl == '2')
@@ -239,6 +252,38 @@ void MainWindow::updateTimer()
    curTime = curTime.addSecs(-1);
    QString timeStr = curTime.toString("hh : mm : ss");
    ui->date_time->setText(timeStr);
+
+   //QTime set to 0 for comparison
+   QTime *comp = new QTime(0, 0, 0, 0);
+   if(curTime == comp)
+   {
+       countdown->stop();
+       //record if recording
+
+       /*For testing purposes, the proper length of time for the inactivity timer has been commented out
+        * and replaced with a 5 minute interval. The 1800000 line is the actual interval if the inactivity
+        * timer was being called for 30 minutes of inactivity
+        */
+       //inacTimer->start(1800000);
+       inacTimer->start(300000);
+
+       ui->date_time->lower();
+       ui->timerView->lower();
+
+       curTimer = 0;
+       recording = false;
+       curTime.setHMS(0, 0, 0, 0);
+       waveform = (string)"";
+       ui->waveSpot->setText("");
+       current = (string)"";
+       ui->currentSpot->setText("");
+       powerlevel = (string)"";
+       frequency = (string)"";
+       ui->freqSpot->setText("");
+       timer = (string)"";
+       ui->timerSpot->setText("");
+       battCount = 0;
+   }
 
 }
 
@@ -375,17 +420,15 @@ void MainWindow::startClicked()
 
     QString format = "dddd/MM/dd-HH:mm:ss";
 
-    ui->timerView->raise();
-    ui->date_time->raise();
+
 
 //    cout<<sessionStartTime.toString().toStdString()<<endl;
     if (attached == true)
     {
+        ui->timerView->raise();
+        ui->date_time->raise();
         countdown->start(1000);
-
-        //during treatment, check every second to see if electrodes connected, if they ever become disconnected stop timer
-        //during treatment, decrement timer every second, also check current for faults every second, also also check battery level
-        //if battery level hits 5% give a warning, if it hits 2% give warning and power off
+        inacTimer->stop();
     }
 
 
@@ -425,4 +468,25 @@ void MainWindow::faultClicked()
     QString fault1 = "701";
     current = fault;
     ui->currentSpot->setText(fault1);
+}
+
+void MainWindow::inactivityTimer()
+{
+    countdown->stop();
+    ui->date_time->lower();
+    ui->timerView->lower();
+    curTimer = 0;
+    recording = false;
+    curTime.setHMS(0, 0, 0, 0);
+    waveform = (string)"";
+    ui->waveSpot->setText("");
+    current = (string)"";
+    ui->currentSpot->setText("");
+    powerlevel = (string)"";
+    frequency = (string)"";
+    ui->freqSpot->setText("");
+    timer = (string)"";
+    ui->timerSpot->setText("");
+    battCount = 0;
+    powerClicked();
 }
