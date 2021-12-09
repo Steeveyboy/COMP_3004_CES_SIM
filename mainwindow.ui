@@ -193,6 +193,9 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
     </property>
    </widget>
    <widget class="QPushButton" name="detachButton">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>440</x>
@@ -700,6 +703,28 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
+   <widget class="QLabel" name="attIco">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>230</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="pixmap">
+     <pixmap>resources/istockphoto-504816042-612x612.jpg</pixmap>
+    </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
+   </widget>
    <zorder>date_time</zorder>
    <zorder>timerView</zorder>
    <zorder>label</zorder>
@@ -735,6 +760,7 @@ font: 75 9pt &quot;Noto Sans Adlam&quot;;</string>
    <zorder>timerSpot</zorder>
    <zorder>currentSpot</zorder>
    <zorder>batteryButton</zorder>
+   <zorder>attIco</zorder>
    <zorder>lowBatteryLabel</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
